@@ -82,3 +82,15 @@ test('the Second Athenian League has its alliance name and historical coastal co
  assert.deepEqual(at(-366,[27.25628257,40.78257223]),['Second Athenian League']);
  assert.deepEqual(at(100,[27.79147702,37.100002]),['Roman Empire']);
 });
+
+test('1130 Aegean island cores and modern Nauru are visible in the dated atlas',()=>{
+ for(const point of [[25.47,37.09],[25.14,37.08],[24.43,37.43],[26.85,37.73]])
+  assert.deepEqual(at(1130,point),['Byzantine Empire']);
+ for(const year of [1968,1999,2000,2024]){
+  const nauru=world(year).features.find(f=>f.properties.NAME==='Nauru');
+  assert.equal(nauru?.properties.displayName,'瑙鲁');
+  assert.equal(nauru?.properties.qid,'Q697');
+  assert.deepEqual(at(year,[166.93,-.52]),['Nauru']);
+ }
+ assert.ok(!world(1967).features.some(f=>f.properties.NAME==='Nauru'));
+});

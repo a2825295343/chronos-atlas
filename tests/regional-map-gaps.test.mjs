@@ -94,3 +94,16 @@ test('1130 Aegean island cores and modern Nauru are visible in the dated atlas',
  }
  assert.ok(!world(1967).features.some(f=>f.properties.NAME==='Nauru'));
 });
+
+test('worldwide historical coastline repairs cover distant shores with their dated owners',()=>{
+ for(const [year,owner,point] of [
+  [100,'Han Dynasty',[121.575008876,31.6413325]],
+  [100,'Roman Empire',[-7.276943943,37.209194]],
+  [500,'Gupta Empire',[84.224642726,18.549811]],
+  [500,'Eastern Roman Empire',[27.743588192,31.133003559]],
+ ]){
+  const polity=world(year).features.find(f=>f.properties.NAME===owner);
+  assert.equal(polity?.properties.worldCoastalGeometry,'world-historical-coast');
+  assert.deepEqual(at(year,point),[owner]);
+ }
+});

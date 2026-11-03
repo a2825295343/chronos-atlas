@@ -62,3 +62,15 @@ test('shared modern reference restores Adriatic islands and Pearl River estuary 
   [[113.55,22.19],"People's Republic of China"],
  ]) assert.deepEqual(at(2024,point),[owner]);
 });
+
+test('dated coastal repairs restore islands without using modern sovereign identities',()=>{
+ for(const [year,owner,point] of [
+  [100,'Roman Empire',[4.25664752,39.82981422]],
+  [1444,'Kingdom of England',[-1.10352053,50.7027245]],
+  [1600,'Tokugawa Government',[129.19366599,34.12953091]],
+ ]){
+  assert.deepEqual(at(year,point),[owner]);
+  const f=world(year).features.find(f=>f.properties.NAME===owner);
+  assert.equal(f.properties.historicalIslandGeometry,'historical-island-coast-alignment');
+ }
+});

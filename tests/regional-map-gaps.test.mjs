@@ -52,3 +52,13 @@ test('modern Azerbaijan renders one polity and one label, retaining Nakhchivan',
  assert.ok(world(1919).features.some(f=>f.properties.NAME==='Azerbaijan Democratic Republic'));
 });
 
+
+test('shared modern reference restores Adriatic islands and Pearl River estuary coverage',()=>{
+ for(const [point,owner] of [
+  [[16.17,43.04],'Republic of Croatia'],
+  [[16.65,43.15],'Republic of Croatia'],
+  [[17.15,42.95],'Republic of Croatia'],
+  [[114.17,22.3],"People's Republic of China"],
+  [[113.55,22.19],"People's Republic of China"],
+ ]) assert.deepEqual(at(2024,point),[owner]);
+});

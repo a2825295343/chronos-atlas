@@ -165,8 +165,8 @@ export default function MapView(props:Props){
    map.addLayer({id:'land',type:'fill',source:'land',paint:{'fill-color':'#5b665f'}});
    map.addSource('elevation',{type:'raster-dem',tiles:[location.origin+'/data/dem/{z}/{x}/{y}.png'],tileSize:256,maxzoom:5,encoding:'terrarium'});
    map.addSource('shade-dem',{type:'raster-dem',tiles:[location.origin+'/data/dem/{z}/{x}/{y}.png'],tileSize:256,maxzoom:5,encoding:'terrarium'});
-   map.addSource('countries',{type:'geojson',data:empty,promoteId:'id',tolerance:0.005,maxzoom:12});
-   map.addSource('borders',{type:'geojson',data:empty,tolerance:0.005,maxzoom:12});
+   map.addSource('countries',{type:'geojson',data:empty,promoteId:'id',tolerance:0.002,maxzoom:14});
+   map.addSource('borders',{type:'geojson',data:empty,tolerance:0.002,maxzoom:14});
    map.addSource('country-labels',{type:'geojson',data:empty});
    map.addSource('viewport-labels',{type:'geojson',data:empty});
    map.addSource('capitals',{type:'geojson',data:empty});
@@ -175,7 +175,7 @@ export default function MapView(props:Props){
    fetch('/data/colonial-reference-sites.geojson',{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error('sites');return r.json();}).then(collection=>{if(mapRef.current!==map)return;referenceSites.current=collection;update();}).catch(()=>latest.current.onError('殖民据点参考资料读取失败。'));
    map.addSource('events',{type:'geojson',data:empty});
    map.addSource('occupations',{type:'geojson',data:empty});
-   map.addSource('provinces',{type:'geojson',data:empty,tolerance:0.005,maxzoom:12});
+   map.addSource('provinces',{type:'geojson',data:empty,tolerance:0.002,maxzoom:14});
    map.addSource('province-labels',{type:'geojson',data:empty});
    const currentGeneration=generation.current;
    Promise.all(['/data/provinces.geojson','/data/historical-provinces.geojson'].map(url=>fetch(url,{cache:'no-cache'}).then(r=>{if(!r.ok)throw Error(url);return r.json();}))).then(([modern,historical])=>{if(generation.current!==currentGeneration||mapRef.current!==map)return;modernRegions.current=modern;historicalRegions.current=historical;const worker=new Worker(new URL('./regions.worker.ts',import.meta.url),{type:'module'});regionWorker.current=worker;worker.onmessage=({data})=>{if(generation.current!==currentGeneration||data.id!==regionRequest.current||data.year!==latest.current.year||lastRegionWorld.current!==latest.current.data)return;if(data.collection)applyRegions(data.collection);else if(data.error)latest.current.onError('该年份分区未能生成，请切换年份重试。');};worker.postMessage({type:'init',modern,historical});lastRegionYear.current=null;updateRegions();}).catch(()=>latest.current.onError('分区资料读取失败。'));
@@ -210,7 +210,7 @@ export default function MapView(props:Props){
    map.addLayer({id:'occupation-base',type:'fill',source:'occupations',paint:{'fill-color':['get','color'],'fill-opacity':0.12}});
    map.addLayer({id:'occupation-pattern',type:'fill',source:'occupations',paint:{'fill-pattern':['get','pattern'],'fill-opacity':0.85}});
    map.addLayer({id:'occupation-line',type:'line',source:'occupations',paint:{'line-color':['get','color'],'line-width':2,'line-dasharray':[4,2]}});
-   map.addSource('selection-borders',{type:'geojson',data:empty,tolerance:0.005});
+   map.addSource('selection-borders',{type:'geojson',data:empty,tolerance:0.002,maxzoom:14});
    map.addLayer({id:'selection-outline',type:'line',source:'selection-borders',paint:{'line-color':'#f7e4b0','line-width':1.1,'line-opacity':0.85}},'ocean-mask');
    const text={ 'text-font':['Atlas Serif'],'text-anchor':'center' as const,'text-allow-overlap':false };
    const waterNames: [string,number,number,number][]=[

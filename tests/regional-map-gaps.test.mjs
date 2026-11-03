@@ -74,3 +74,11 @@ test('dated coastal repairs restore islands without using modern sovereign ident
   assert.equal(f.properties.historicalIslandGeometry,'historical-island-coast-alignment');
  }
 });
+
+test('the Second Athenian League has its alliance name and historical coastal coverage',()=>{
+ const league=world(-366).features.find(f=>f.properties.NAME==='Second Athenian League');
+ assert.equal(league.properties.displayName,'第二次雅典同盟');
+ assert.equal(league.properties.mapLabel,'第二次雅典同盟');
+ assert.deepEqual(at(-366,[27.25628257,40.78257223]),['Second Athenian League']);
+ assert.deepEqual(at(100,[27.79147702,37.100002]),['Roman Empire']);
+});

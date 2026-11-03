@@ -1,5 +1,5 @@
 import {areaKm2,featureCenter,pointInGeometry,colorForName} from './history.mjs';
-import {politicalBorders} from './cartography.mjs';
+import {politicalBorders,visiblePoliticalFootprints} from './cartography.mjs';
 import {polygonRenderParts} from './polygon-render.mjs';
 import {mapName} from './map-names.mjs';
 const merc=lat=>Math.log(Math.tan(Math.PI/4+Math.max(-84,Math.min(84,lat))*Math.PI/360))*180/Math.PI;
@@ -63,5 +63,5 @@ export function buildAtlasFrame(data,localize=name=>name){
  });
  const collection={type:'FeatureCollection',features};
  const fills=polygonRenderParts(collection,p=>({id:p.id,NAME:p.NAME,owner:p.owner,label:p.label,color:p.color}));
- return {...collection,atlas:{fills,borders:politicalBorders(collection),labels:countryGlyphs(features,localize)}};
+ return {...collection,atlas:{fills,borders:politicalBorders(visiblePoliticalFootprints(collection)),labels:countryGlyphs(features,localize)}};
 }

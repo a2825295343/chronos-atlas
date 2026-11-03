@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync,readdirSync,statSync} from 'node:fs';
-import {politicalBorders} from '../src/cartography.ts';
+import {politicalBorders,visiblePoliticalFootprints} from '../src/cartography.mjs';
 const read=name=>JSON.parse(readFileSync(new URL(name,import.meta.url),'utf8'));
 test('every bundled historical polity and cultural label has a Chinese translation',()=>{
  const labels=read('../src/localization/names.zh.json'),sources=read('../src/localization/provenance.json');
@@ -54,4 +54,18 @@ test('coincident exterior copies keep one outline and occupation strokes stay se
  assert.equal(lines.length,1);
  assert.equal(lines[0].length,5);
  assert.ok(lines[0].every(([x,y])=>[0,2].includes(x)&&[0,2].includes(y)));
+});
+
+test('a lower outline stops at an overlapping higher territory without editing the source',()=>{
+ const polygon=(name,ring)=>({type:'Feature',properties:{NAME:name},geometry:{type:'Polygon',coordinates:[ring]}});
+ const lower=polygon('lower',[[0,0],[2,0],[2,1],[2,2],[0,2],[0,0]]);
+ const upper=polygon('upper',[[1,0.5],[3,0.5],[3,1.5],[1,1.5],[1,0.5]]);
+ const data={type:'FeatureCollection',features:[lower,upper]};
+ const visible=visiblePoliticalFootprints(data);
+ assert.equal(visible.features[1],upper);
+ assert.equal(data.features[0],lower);
+ const lines=politicalBorders(visible).features[0].geometry.coordinates;
+ assert.ok(!lines.some(line=>line.slice(1).some((p,i)=>p[0]===2&&line[i][0]===2&&
+  Math.min(p[1],line[i][1])<1.5&&Math.max(p[1],line[i][1])>.5)));
+ assert.ok(lines.some(line=>line.slice(1).some((p,i)=>p[0]===3&&line[i][0]===3)));
 });

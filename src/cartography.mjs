@@ -1,3 +1,74 @@
+import polygonClipping from 'polygon-clipping';
+import {pointInGeometry} from './history.mjs';
+
+/** Build an outline for the parts actually visible through the paint order.
+ * Original features still drive territories, selection and archive data.
+ */
+export function visiblePoliticalFootprints(collection){
+ const parts=[];
+ for(const f of collection.features){
+  if(f.properties?.controlArea||!f.geometry)continue;
+  const polygons=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.type==='MultiPolygon'?f.geometry.coordinates:[];
+  for(const polygon of polygons){
+   const bounds=[Infinity,Infinity,-Infinity,-Infinity];
+   for(const [x,y] of polygon[0]){
+    bounds[0]=Math.min(bounds[0],x);bounds[1]=Math.min(bounds[1],y);
+    bounds[2]=Math.max(bounds[2],x);bounds[3]=Math.max(bounds[3],y);
+   }
+   parts.push({f,polygon,bounds,order:parts.length,covers:[],weight:polygon.reduce((n,ring)=>n+ring.length,0)});
+  }
+ }
+ const sorted=[...parts].sort((a,b)=>a.bounds[0]-b.bounds[0]);
+ for(let i=0;i<sorted.length;i++){
+  const a=sorted[i];
+  for(let j=i+1;j<sorted.length;j++){
+   const b=sorted[j];
+   if(b.bounds[0]>=a.bounds[2])break;
+   if(a.f===b.f||a.bounds[1]>=b.bounds[3]||b.bounds[1]>=a.bounds[3])continue;
+   const [below,above]=a.order<b.order?[a,b]:[b,a];
+   if(below.f.properties?.boundaryGeometry&&above.f.properties?.boundaryGeometry)continue;
+   // An enclosed polygon adds its own outline. It cannot hide the lower
+   // outer stroke unless it reaches that stroke.
+   const [w,s,e,n]=above.bounds;
+   const ring=below.polygon[0],stride=Math.max(1,Math.floor(ring.length/20));
+   let hidesOutline=false;
+   for(let k=0;k<ring.length;k+=stride){
+    const [x,y]=ring[k];
+    if(x<=w||x>=e||y<=s||y>=n)continue;
+    if(pointInGeometry(ring[k],{type:'Polygon',coordinates:above.polygon})){
+     hidesOutline=true;
+     break;
+    }
+   }
+   if(hidesOutline)below.covers.push(above);
+  }
+ }
+ const updated=new Map();
+ let clipBudget=9000;
+ for(const part of parts){
+  const {f,polygon,covers}=part;
+  let coordinates=[polygon];
+  const cost=part.weight+covers.reduce((total,cover)=>total+cover.weight,0);
+  if(covers.length&&cost<=clipBudget){
+   clipBudget-=cost;
+   try{
+    coordinates=polygonClipping.difference(polygon,...covers.map(cover=>cover.polygon));
+    if(!updated.has(f))updated.set(f,new Map());
+    updated.get(f).set(polygon,coordinates);
+   }catch{/* Keep this footprint when a source ring cannot be clipped. */}
+  }
+ }
+ const features=collection.features.flatMap(f=>{
+  const replacements=updated.get(f);
+  if(!replacements)return [f];
+  const polygons=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.coordinates;
+  const coordinates=polygons.flatMap(p=>replacements.get(p)??[p]);
+  return coordinates.length?[{...f,geometry:{type:'MultiPolygon',coordinates}}]:[];
+ });
+ return {...collection,features};
+}
+
+
 // Use the same quantization for border topology and for stitching drawing paths.
 const SCALE=1e5;
 const key=([x,y])=>x+','+y;

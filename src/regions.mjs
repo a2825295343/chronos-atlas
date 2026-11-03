@@ -16,6 +16,17 @@ const rules=[...periodPlaceRules,
  {id:'TUR-2265',from:1453,to:1922,label:'科斯坦丁尼耶（伊斯坦布尔）',owners:['Ottoman Empire']},
  {id:'TUR-2230',from:1500,to:1922,label:'士麦那地区',owners:['Ottoman Empire']},
 ];
+// Modern cells spanning a former province are only neutral hit areas.
+const formerProvinceCells={
+ chahar:['CHN-1838','CHN-1811','CHN-1805'],
+ pingyuan:['CHN-1814','CHN-1811','CHN-1812'],
+ suiyuan:['CHN-1838','CHN-1804'],
+ songjiang:['CHN-1839','CHN-1828'],
+ liaodong:['CHN-1813','CHN-1828'],
+ liaoxi:['CHN-1813','CHN-1838'],
+ rehe:['CHN-1838','CHN-1813','CHN-1811'],
+ xikang:['CHN-1662','CHN-1810','CHN-1809'],
+};
 const sourceFor=id=>id.startsWith('RUS-')?'https://www.britannica.com/place/St-Petersburg-Russia':id.startsWith('KOR-')?'https://english.seoul.go.kr/seoul-of-the-past/':'https://www.britannica.com/place/Istanbul';
 /** Actual historical geometries replace reference cells where data is available. */
 export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
@@ -24,9 +35,13 @@ export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
  const owners=(world?.features||[]).filter(f=>f.geometry&&['Polygon','MultiPolygon'].includes(f.geometry.type)).map(f=>({f,b:bounds(f.geometry)}));
  const names=new Set(owners.map(o=>o.f.properties?.NAME));
  const ownerAt=p=>owners.find(o=>p[0]>=o.b[0]&&p[0]<=o.b[2]&&p[1]>=o.b[1]&&p[1]<=o.b[3]&&pointInGeometry(p,o.f.geometry))?.f.properties.NAME;
- let active=[];
+ const active=[];
  for(const f of [...historical.features].sort((a,b)=>Number(a.properties.priority==='fallback')-Number(b.properties.priority==='fallback'))){
   const p=f.properties;if(p.validFrom>year||p.validTo<year)continue;
+  if(p.supplement==='discontinued-chinese-provinces'){
+   if(p.locatorOnly&&f.geometry.type==='Point')active.push(f);
+   continue;
+  }
   const scoped=p.ownerRequired||p.ownerAny?.length||p.ownerPrefix?.length;
   if(!scoped){
    if(p.priority==='fallback'){
@@ -50,35 +65,17 @@ export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
   if(pieces.length>1)try{coordinates=polygonClipping.union(pieces);}catch{/* Keep valid clipped pieces, never restore the unsliced reference. */}
   active.push({...f,geometry:{type:'MultiPolygon',coordinates},properties:{...p,clippedToOwner:true,...(failures?{clipFailures:failures}:{} )}});
  }
- // Former provinces partition the reference layer for the years they exist.
- // Cut away the same area from both modern cells and other historical cells.
- const formerProvinces=active.filter(f=>f.properties.supplement==='discontinued-chinese-provinces');
- const formerIds=new Set(formerProvinces.map(f=>f.properties.id));
- const masks=[];
- function outsideFormerProvinces(f){
-  if(f.properties.country!=='China'||!masks.length)return f;
-  const b=bounds(f.geometry),overlapping=masks.filter(m=>intersects(b,m.bounds));
-  if(!overlapping.length)return f;
-  try{
-   const coordinates=polygonClipping.difference(f.geometry.coordinates,...overlapping.map(m=>m.coordinates));
-   return coordinates.length?{...f,geometry:{type:'MultiPolygon',coordinates}}:null;
-  }catch{return null;}
- }
- const formerPartition=[];
- for(const province of formerProvinces){
-  const remainder=outsideFormerProvinces(province);
-  if(!remainder)continue;
-  formerPartition.push(remainder);
-  masks.push({bounds:bounds(remainder.geometry),coordinates:remainder.geometry.coordinates});
- }
- if(masks.length)active=[...active.filter(f=>!formerIds.has(f.properties.id)).map(outsideFormerProvinces).filter(Boolean),...formerPartition];
+ const withheldCells=new Set(active.filter(f=>f.properties.locatorOnly)
+  .flatMap(f=>formerProvinceCells[f.properties.id.split(':')[1].replace('-yaan','')]||[]));
  const replaced=new Set(active.filter(f=>f.properties.replaceCountry||(!f.properties.replaces&&f.properties.country==='Italy')).map(f=>f.properties.country));
  const replacedIds=new Set(active.flatMap(f=>f.properties.replaces||[]));
  const features=modern.features.filter(f=>!replaced.has(f.properties.country)&&!replacedIds.has(f.properties.id)
-  &&!(f.properties.id==='CHN-1813'&&year>=1949&&year<=1953)).map(outsideFormerProvinces).filter(Boolean).map(f=>{
+  &&!(f.properties.id==='CHN-1813'&&year>=1949&&year<=1953)).map(f=>{
   const candidate=rules.find(r=>r.id===f.properties.id&&r.from<=year&&year<=r.to);
   const modernYear=cellModernFrom[f.properties.id]??modernReferenceFrom[f.properties.country]??1950;
   const reference=()=>({...f,properties:{...f.properties,dataKind:'modern-reference',modernLabel:f.properties.label,suppressLabel:year<modernYear,boundaryVisible:year>=modernYear,accuracy:year<modernYear?'该年历史名称与行政界未核定；此地块仅作可点击的空间定位参考，现代行政名不显示在古代地图上。':'现代分区定位参考；不能据此推断该年边界与现状完全相同。'}});
+  if(withheldCells.has(f.properties.id))return {...f,properties:{...f.properties,dataKind:'modern-reference',
+   suppressLabel:true,boundaryVisible:false,accuracy:'此处仅可定位。该年的省界待用同期地图配准。'}};
   if(!candidate){
    const established=establishedNames[f.properties.id];
    const dated=established?.periods?.find(r=>r.from<=year&&year<=r.to);

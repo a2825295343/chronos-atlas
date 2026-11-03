@@ -8,7 +8,6 @@ import {baseColor, colorDistance} from '../src/colors.mjs';
 import {buildAtlasFrame} from '../src/atlas-render.mjs';
 import {GeoJSONVT} from '@maplibre/geojson-vt';
 import {classifyRings} from '@maplibre/maplibre-gl-style-spec';
-import polygonClipping from 'polygon-clipping';
 
 const read = file => JSON.parse(readFileSync(new URL('../public/data/' + file, import.meta.url), 'utf8'));
 
@@ -60,20 +59,23 @@ test('the eight former provinces appear before their respective mergers and use 
  assert.ok(provinces.features.every(f => !f.properties.boundaryVisible));
 });
 
-test('former Chinese provinces cut through contemporary reference cells without duplicate coverage', () => {
+test('former Chinese provinces have dated seat points and never reshape modern reference cells', () => {
  const onlyChina = collection => ({...collection,features:collection.features.filter(f => f.properties.country === 'China')});
  const modern = onlyChina(read('provinces.geojson'));
  const historical = onlyChina(read('historical-provinces.geojson'));
- for (const year of [1930,1951,1953,1954,1955]) {
-  const features = regionsAtYear(modern,historical,undefined,year).features;
-  const former = features.filter(f => f.properties.supplement === 'discontinued-chinese-provinces');
-  for (const province of former) for (const other of features) {
-   if (province === other) continue;
-   assert.equal(polygonClipping.intersection(province.geometry.coordinates,other.geometry.coordinates).length,0,
-    `${year}: ${province.properties.label} / ${other.properties.label}`);
-  }
-  assert.equal(features.some(f => f.properties.id === 'CHN-1813'),year < 1949 || year >= 1954);
- }
+ const original = modern.features.find(f => f.properties.id === 'CHN-1814');
+ const features = regionsAtYear(modern,historical,undefined,1951).features;
+ const former = features.filter(f => f.properties.supplement === 'discontinued-chinese-provinces');
+ assert.equal(former.length,8);
+ assert.ok(former.every(f => f.geometry.type === 'Point' && f.properties.locatorOnly));
+ const shandong = features.find(f => f.properties.id === original.properties.id);
+ assert.equal(shandong.geometry,original.geometry);
+ assert.equal(shandong.properties.boundaryVisible,false);
+ assert.equal(shandong.properties.suppressLabel,true);
+ assert.ok(!features.some(f => f.properties.id === 'CHN-1813'));
+ const oldPolygon = {...former[0],geometry:original.geometry,properties:{...former[0].properties,locatorOnly:false}};
+ const stale = regionsAtYear(modern,{...historical,features:[oldPolygon]},undefined,1951);
+ assert.ok(!stale.features.some(f => f.properties.supplement === 'discontinued-chinese-provinces'));
 });
 
 test('Tianjin concession tiles have explicit priority across zoom levels', () => {

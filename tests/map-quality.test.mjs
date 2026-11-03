@@ -25,3 +25,18 @@ test('neighboring subregions draw one national border and hide same-owner subdiv
  assert.equal(countShared(politicalBorders({type:'FeatureCollection',features:[feature('a','one',0),feature('b','one',1)]})),0);
  assert.equal(countShared(politicalBorders({type:'FeatureCollection',features:[feature('a','one',0),feature('b','two',1)]})),1);
 });
+
+test('shared borders deduplicate even when one outline has intermediate vertices',()=>{
+ const left={type:'Feature',properties:{NAME:'left',SUBJECTO:'left'},geometry:{
+  type:'Polygon',coordinates:[[[0,0],[1,0],[1,1],[0,1],[0,0]]],
+ }};
+ const right={type:'Feature',properties:{NAME:'right',SUBJECTO:'right'},geometry:{
+  type:'Polygon',coordinates:[[[1,0],[2,0],[2,1],[1,1],[1,.6],[1,.3],[1,0]]],
+ }};
+ const sharedLength=()=>politicalBorders({type:'FeatureCollection',features:[left,right]})
+  .features[0].geometry.coordinates.reduce((total,line)=>total+line.slice(1).reduce((sum,p,i)=>
+   sum+(p[0]===1&&line[i][0]===1?Math.abs(p[1]-line[i][1]):0),0),0);
+ assert.equal(sharedLength(),1);
+ right.properties.SUBJECTO='left';
+ assert.equal(sharedLength(),0);
+});

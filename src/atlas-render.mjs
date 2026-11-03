@@ -62,6 +62,15 @@ export function buildAtlasFrame(data,localize=name=>name){
   return {...f,id,properties:{...p,controlId:p.controlArea?p.id:undefined,id,owner,label:mapName(p,localize),ownerLabel:p.displayName||localize(owner),color:p.controlArea?colorForName(p.sovereignName||owner):p.thematicColor||colorForName(owner),atlasArea:areaKm2(f.geometry),atlasCenter:featureCenter(f.geometry)}};
  });
  const collection={type:'FeatureCollection',features};
- const fills=polygonRenderParts(collection,p=>({id:p.id,NAME:p.NAME,owner:p.owner,label:p.label,color:p.color}));
+ const fills=polygonRenderParts(collection,p=>({id:p.id,NAME:p.NAME,owner:p.owner,label:p.label,color:p.color,fillOrder:0}));
+ // A clipped Qing exterior can cover a concession hole at some tile zooms.
+ // Keep the local concession parts above the mainland in every tile.
+ for(const part of fills.features){
+  const p=features[part.properties.id].properties;
+  const concession=p.validFrom<=1917&&p.validTo>=1860&&
+   ['Empire of Japan','French Indochina','Russian Empire','Austria-Hungary','Kingdom of Belgium','Kingdom of Italy','German Empire','United Kingdom of Great Britain and Ireland'].includes(p.NAME)&&
+   part.geometry.coordinates[0].every(([x,y])=>x>=116.8&&x<=118.2&&y>=38.6&&y<=39.85);
+  if(concession)part.properties={...part.properties,fillOrder:1};
+ }
  return {...collection,atlas:{fills,borders:politicalBorders(visiblePoliticalFootprints(collection)),labels:countryGlyphs(features,localize)}};
 }

@@ -188,7 +188,7 @@ export default function MapView(props:Props){
    for(let lat=-60;lat<=60;lat+=30)graticule.features.push({type:'Feature',properties:{},geometry:{type:'LineString',coordinates:Array.from({length:361},(_,i)=>[i-180,lat])}});
    map.addSource('graticule',{type:'geojson',data:graticule});
    map.addLayer({id:'grid',type:'line',source:'graticule',paint:{'line-color':'#bac5bb','line-opacity':0.08,'line-width':0.6}});
-   map.addLayer({id:'country-fill',type:'fill',source:'countries',paint:{'fill-color':['get','color'],'fill-opacity':0.96,'fill-antialias':false,'fill-opacity-transition':{duration:500}}});
+   map.addLayer({id:'country-fill',type:'fill',source:'countries',layout:{'fill-sort-key':['get','fillOrder']},paint:{'fill-color':['get','color'],'fill-opacity':0.96,'fill-antialias':false,'fill-opacity-transition':{duration:500}}});
    map.addLayer({id:'hillshade',type:'hillshade',source:'shade-dem',paint:{'hillshade-exaggeration':0.27,'hillshade-shadow-color':'#354b3c','hillshade-highlight-color':'#f4efd7','hillshade-accent-color':'#7f8d6e','hillshade-illumination-direction':315}});
    map.addSource('ocean-mask',{type:'geojson',data:'/data/ocean-mask-render.geojson',tolerance:0,maxzoom:12});
    map.addLayer({id:'ocean-mask',type:'fill',source:'ocean-mask',paint:{'fill-color':'#183647','fill-opacity':1,'fill-antialias':false}});

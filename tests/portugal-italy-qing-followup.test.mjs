@@ -5,6 +5,10 @@ import {activePolities} from '../src/temporal.mjs';
 import {pointInGeometry} from '../src/history.mjs';
 import {regionsAtYear} from '../src/regions.mjs';
 import {baseColor, colorDistance} from '../src/colors.mjs';
+import {buildAtlasFrame} from '../src/atlas-render.mjs';
+import {GeoJSONVT} from '@maplibre/geojson-vt';
+import {classifyRings} from '@maplibre/maplibre-gl-style-spec';
+import polygonClipping from 'polygon-clipping';
 
 const read = file => JSON.parse(readFileSync(new URL('../public/data/' + file, import.meta.url), 'utf8'));
 
@@ -54,6 +58,40 @@ test('the eight former provinces appear before their respective mergers and use 
  assert.deepEqual(labels(1954), ['热河省','西康省']);
  assert.equal(labels(1955).length, 0);
  assert.ok(provinces.features.every(f => !f.properties.boundaryVisible));
+});
+
+test('former Chinese provinces cut through contemporary reference cells without duplicate coverage', () => {
+ const onlyChina = collection => ({...collection,features:collection.features.filter(f => f.properties.country === 'China')});
+ const modern = onlyChina(read('provinces.geojson'));
+ const historical = onlyChina(read('historical-provinces.geojson'));
+ for (const year of [1930,1951,1953,1954,1955]) {
+  const features = regionsAtYear(modern,historical,undefined,year).features;
+  const former = features.filter(f => f.properties.supplement === 'discontinued-chinese-provinces');
+  for (const province of former) for (const other of features) {
+   if (province === other) continue;
+   assert.equal(polygonClipping.intersection(province.geometry.coordinates,other.geometry.coordinates).length,0,
+    `${year}: ${province.properties.label} / ${other.properties.label}`);
+  }
+  assert.equal(features.some(f => f.properties.id === 'CHN-1813'),year < 1949 || year >= 1954);
+ }
+});
+
+test('Tianjin concession tiles have explicit priority across zoom levels', () => {
+ const world = activePolities(read('temporal/19.geojson'),1903);
+ const names = ['Qing Dynasty','Empire of Japan','French Indochina','Russian Empire'];
+ const {atlas} = buildAtlasFrame({...world,features:world.features.filter(f => names.includes(f.properties.NAME))});
+ const tiles = new GeoJSONVT(atlas.fills,{maxZoom:14,extent:8192,tolerance:.002*16,buffer:128*16});
+ for (const [name,[lon,lat]] of [[names[1],[117.502,38.900]],[names[2],[117.235,39.417]],[names[3],[117.555,39.417]]]) {
+  for (const zoom of [3,4,5,6,7,8,10,12,14]) {
+   const n = 2**zoom,x = (lon+180)/360*n,y = (1-Math.log(Math.tan(Math.PI/4+lat*Math.PI/360))/Math.PI)/2*n;
+   const tx = Math.floor(x),ty = Math.floor(y),local = [(x-tx)*8192,(y-ty)*8192];
+   const hit = tiles.getTile(zoom,tx,ty).features.filter(f => classifyRings(f.geometry.map(r => r.map(([x,y]) => ({x,y}))),500)
+    .some(p => pointInGeometry(local,{type:'Polygon',coordinates:p.map(r => r.map(({x,y}) => [x,y]))})))
+    .sort((a,b) => b.tags.fillOrder-a.tags.fillOrder)[0];
+   assert.equal(hit?.tags.NAME,name,`${zoom}: ${name}`);
+   assert.equal(hit.tags.fillOrder,1);
+  }
+ }
 });
 
 test('Li Zicheng keeps the same archive and war identity as his map name changes', () => {

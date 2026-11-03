@@ -3,11 +3,11 @@
 全球全部已打包领土记录；每个年份的有效期扫描；全球25个关键年份的空间交叉检查。不是逐条史学专家审定，也不是完整年度疆界库。
 
 - shards: 55
-- storedShardRows: 26367
-- uniqueDatedRows: 24010
-- sourceRecords: 18559
-- polityIdentities: 1763
-- identitiesWithDateMetadata: 1287
+- storedShardRows: 26453
+- uniqueDatedRows: 24095
+- sourceRecords: 18577
+- polityIdentities: 1771
+- identitiesWithDateMetadata: 1288
 - yearQueriesChecked: 5424
 - from: -3400
 - to: 2024
@@ -16,7 +16,7 @@
 - metadataLeadsRemaining: 151
 - structuralErrors: 0
 - spatialCheckpoints: 25
-- overlapPairsToReview: 53
+- overlapPairsToReview: 49
 - intervalsAtLeast25Years: 3109
 
 ## 已确认修正

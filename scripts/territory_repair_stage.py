@@ -1,5 +1,6 @@
 """Shared staged, period-aware geometry repair; explicit regions only."""
 import copy,hashlib,json,shutil,sys
+from tempfile import NamedTemporaryFile
 from collections import defaultdict
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'.local/python'))
@@ -8,7 +9,16 @@ from shapely.geometry import shape,mapping
 from shapely.strtree import STRtree
 from prepare_political_presentation import label_path
 def read(p):return json.loads((ROOT/p).read_bytes())
-def write(p,d):(ROOT/p).write_text(json.dumps(d,ensure_ascii=False,separators=(',',':')),encoding='utf8')
+def write(p,d):
+ path=ROOT/p
+ with NamedTemporaryFile(mode='w',encoding='utf8',dir=path.parent,delete=False) as handle:
+  temporary=Path(handle.name)
+  try:
+   handle.write(json.dumps(d,ensure_ascii=False,separators=(',',':')))
+   handle.close()
+   temporary.replace(path)
+  finally:
+   temporary.unlink(missing_ok=True)
 def clean(g):
  if not g.is_valid:g=make_valid(g)
  if g.geom_type in ['Polygon','MultiPolygon']:return g

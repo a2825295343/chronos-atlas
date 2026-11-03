@@ -28,7 +28,7 @@ function add(collection,from,to){
 const index=read('public/data/temporal/index.json');
 for(const c of index.centuries)add(read(`public/data/temporal/${c}.geojson`),c*100,c*100+99);
 for(const entry of read('public/data/manifest.json'))add(read('public/data/'+entry.filename),entry.year,entry.year);
-const pinned={'法国':'#65a6ce','德国':'#bd98ce','德国（联邦）':'#bd98ce','德国（民主）':'#cf7a79','英国':'#cf7a79','西班牙':'#d7a641','葡萄牙':'#79b08a','苏联':'#a52b48','俄罗斯':'#79b08a','美国':'#3768ac','日本':'#cf7a79','明朝':'#d7a641','清朝':'#dc985e','罗马帝国':'#cf7a79','奥斯曼帝国':'#5da99e'};
+const pinned={'法国':'#65a6ce','德国':'#bd98ce','德国（联邦）':'#bd98ce','德国（民主）':'#cf7a79','英国':'#cf7a79','西班牙':'#d7a641','意大利':'#8057a6','葡萄牙':'#79b08a','苏联':'#a52b48','俄罗斯':'#79b08a','美国':'#3768ac','日本':'#cf7a79','明朝':'#d7a641','清朝':'#dc985e','罗马帝国':'#cf7a79','奥斯曼帝国':'#5da99e'};
 Object.assign(pinned,{'盖尔爱尔兰诸领地':'#ac87c9','爱尔兰王权领地':'#d7a641','西亚丁保护诸邦':'#d7a641','东亚丁保护诸邦':'#ac87c9','Colony of Aden':'#cf7a79'});
 Object.assign(pinned,{'Suiyuan Chahar Local Authorities':'#3976c9','Inner Mongolian Autonomy Movement Areas':'#247d8f'});
 Object.assign(pinned,{"Japanese clan - Oda": "#dc985e", "Japanese clan - Toyotomi": "#b5b35f", "Japanese clan - Uesugi": "#65a6ce", "Japanese clan - Takeda": "#bf7860", "Japanese clan - Mori": "#ac87c9", "Japanese clan - Shimazu": "#5da99e", "Japanese clan - Ouchi": "#d7a641", "Japanese clan - Amago": "#cf7a79", "Japanese clan - Otomo": "#899bd2", "Japanese clan - Go-Hojo": "#d7a641", "Japanese clan - Date": "#c28b45", "Japanese clan - Imagawa": "#77bacc", "Japanese clan - Saito": "#b89870", "Japanese clan - Chosokabe": "#d58cac", "Japanese clan - Hori": "#8caa62", "Japanese clan - Kimotsuki": "#dc985e"});

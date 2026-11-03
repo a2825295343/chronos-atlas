@@ -45,7 +45,8 @@ export function activePolities(collection,year){
   const sovereignName=p.sovereignName==='United Kingdom'?(year<1707?'Kingdom of England':year<1801?'Kingdom of Great Britain':year<1922?'United Kingdom of Great Britain and Ireland':'United Kingdom'):p.sovereignName;
   const sovereignQid=p.sovereignName==='United Kingdom'?(year<1707?'Q179876':year<1801?'Q161885':year<1922?'Q174193':'Q145'):p.sovereignQid;
   const chineseNames={'Kingdom of Prussia':'普鲁士王国','Norman England':'诺曼英格兰王国','Burgundian Kingdom':'勃艮第王国','Frankish Burgundy':'法兰克勃艮第王国','Revolutionary Serbia':'塞尔维亚起义政权','Principality of Serbia':'塞尔维亚公国','Kingdom of Serbia':'塞尔维亚王国','Second Hellenic Republic':'希腊第二共和国','Kingdom of Greece':'希腊王国','Republic of Lithuania':'立陶宛共和国','Eastern Zhou':'东周','Eastern Jin':'东晋','Liu Song Dynasty':'刘宋','Yue':'越国','Qin':'秦国'};
-  return {...feature,properties:{...p,sourceQid:p.sourceQid||p.qid,sourceName:p.sourceName||p.NAME,NAME:name,SUBJECTO:p.controlArea?p.controller:name,qid,entityId:qid,sovereignName,sovereignQid,displayName:chineseNames[name]||(name!==p.NAME?(colorGroups[name]||name):p.displayName)}};
+  const displayName=name==='Li Zicheng'?(year>=1644?'大顺':'李自成起义军'):chineseNames[name]||(name!==p.NAME?(colorGroups[name]||name):p.displayName);
+  return {...feature,properties:{...p,sourceQid:p.sourceQid||p.qid,sourceName:p.sourceName||p.NAME,NAME:name,SUBJECTO:p.controlArea?p.controller:name,qid,entityId:qid,sovereignName,sovereignQid,displayName}};
  })});
 }
 const stops=[[1.8,0,1],[3,0,1],[4,18,1.3],[6,48,2.4],[8,67,3.7],[10,72,4.4]];

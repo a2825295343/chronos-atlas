@@ -107,3 +107,13 @@ test('worldwide historical coastline repairs cover distant shores with their dat
   assert.deepEqual(at(year,point),[owner]);
  }
 });
+
+test('modern Luxembourg uses shared national edges and Baikonur retains Kazakh sovereign fill',()=>{
+ const modern=world(2024).features;
+ const lux=modern.find(f=>f.properties.NAME==='Luxembourg');
+ assert.equal(lux.properties.boundaryGeometry,'natural-earth-modern-admin0');
+ assert.deepEqual(at(2024,[6.1319,49.6116]),['Luxembourg']);
+ const kazakhstan=modern.find(f=>f.properties.NAME==='Kazakhstan');
+ assert.match(kazakhstan.properties.baikonurLeaseSource,/adilet/);
+ assert.deepEqual(at(2024,[63.31,45.62]),['Kazakhstan']);
+});

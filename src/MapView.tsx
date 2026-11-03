@@ -198,8 +198,8 @@ export default function MapView(props:Props){
    map.addSource('rivers',{type:'geojson',data:'/data/ne_10m_rivers_lake_centerlines.geojson',tolerance:0.08,maxzoom:12});
    map.addLayer({id:'rivers',type:'line',source:'rivers',minzoom:2.5,filter:['<=',['get','scalerank'],4],layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#426f7b','line-width':['interpolate',['linear'],['zoom'],2.5,0.45,6,0.9,10,1.5],'line-opacity':0.6}});
    fetch('/data/paleogeography/index.json').then(r=>{if(!r.ok)throw Error();return r.json();}).then(index=>{if(mapRef.current===map){paleoIndex.current=index;update();}}).catch(()=>{});
-   map.addLayer({id:'country-line-casing',type:'line',source:'borders',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#405449','line-width':['interpolate',['linear'],['zoom'],0,0.9,4,1.5,8,2.1],'line-opacity':0.62}});
-   map.addLayer({id:'country-line',type:'line',source:'borders',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#e2dbc0','line-width':['interpolate',['linear'],['zoom'],0,0.3,4,0.55,8,0.85],'line-opacity':0.85}});
+   map.addLayer({id:'country-line-casing',type:'line',source:'borders',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#405449','line-width':['interpolate',['linear'],['zoom'],0,0.9,4,1.5,8,2.1],'line-opacity':0.62}},'ocean-mask');
+   map.addLayer({id:'country-line',type:'line',source:'borders',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#e2dbc0','line-width':['interpolate',['linear'],['zoom'],0,0.3,4,0.55,8,0.85],'line-opacity':0.85}},'ocean-mask');
    map.addLayer({id:'province-line',type:'line',source:'provinces',minzoom:4.5,layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#516a59','line-width':['interpolate',['linear'],['zoom'],4.5,0.3,8,0.7],'line-opacity':['interpolate',['linear'],['zoom'],4.5,0,6,['case',['==',['get','boundaryVisible'],false],0,0.42]]}});
    map.addLayer({id:'province-hit',type:'fill',source:'provinces',minzoom:4.7,paint:{'fill-color':'#ffffff','fill-opacity':0}});
    map.addLayer({id:'province-selection',type:'line',source:'provinces',filter:['==',['get','id'],''],paint:{'line-color':'#f6e4ac','line-width':1.5}});
@@ -211,7 +211,7 @@ export default function MapView(props:Props){
    map.addLayer({id:'occupation-pattern',type:'fill',source:'occupations',paint:{'fill-pattern':['get','pattern'],'fill-opacity':0.85}});
    map.addLayer({id:'occupation-line',type:'line',source:'occupations',paint:{'line-color':['get','color'],'line-width':2,'line-dasharray':[4,2]}});
    map.addSource('selection-borders',{type:'geojson',data:empty,tolerance:0.005});
-   map.addLayer({id:'selection-outline',type:'line',source:'selection-borders',paint:{'line-color':'#f7e4b0','line-width':1.1,'line-opacity':0.85}});
+   map.addLayer({id:'selection-outline',type:'line',source:'selection-borders',paint:{'line-color':'#f7e4b0','line-width':1.1,'line-opacity':0.85}},'ocean-mask');
    const text={ 'text-font':['Atlas Serif'],'text-anchor':'center' as const,'text-allow-overlap':false };
    const waterNames: [string,number,number,number][]=[
     ['太平洋',-151,13,0],['北太平洋',154,34,2],['南太平洋',-126,-31,2],
@@ -345,9 +345,3 @@ export function ownerAt(position:[number,number],data:FeatureCollection|null){
  const polity=features.find(f=>!f.properties?.controlArea&&f.properties?.NAME&&pointInGeometry(position,f.geometry));
  return polity?.properties?.SUBJECTO?.trim()||polity?.properties?.NAME;
 }
-
-
-
-
-
-

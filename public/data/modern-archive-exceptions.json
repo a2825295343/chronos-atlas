@@ -1,0 +1,5 @@
+{
+ "Mujahideen":{"from":2024,"to":2026,"noUnifiedFlag":true,"flagNote":"原始资料中的叙利亚武装势力分组，没有可核定的统一国旗","leadershipNote":"这条GIS记录聚合了武装势力，不能据地理位置推定为某个组织或某位国家元首的全部控制区。其统一指挥者尚不能核定。"},
+ "Gaza/Hamas":{"from":2024,"to":2026,"noUnifiedFlag":true,"flagNote":"战时地方政府与组织记录，代表旗尚待逐阶段核定","leadershipNote":"加沙战时地方政府、组织领导层与各方军事控制不是同一概念；不以巴勒斯坦总统或某位组织领导人代填整个区域的统一统治者。"},
+ "Russian-occupied territories":{"from":2014,"to":2026,"flagOwner":"Q159","flagRole":"控制方代表旗 · 不表示主权归属","leadershipCountry":"Q159","leadershipNote":"下列为控制方俄罗斯的中央国家元首资料，不代替当地军事指挥官，也不表示对这些领土主权归属的认定。"}
+}

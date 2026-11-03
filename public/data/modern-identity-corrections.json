@@ -1,0 +1,28 @@
+{
+ "scope":"现代国家及海外领地的档案实体关联；不修改历史边界。与Natural Earth国家ID及维基数据条目交叉核对。",
+ "identityCorrections":[
+  {"name":"Hungary","from":1989,"to":2026,"qid":"Q28","label":"匈牙利","article":"Hungary","reason":"现代匈牙利误关联奥匈帝国"},
+  {"name":"Second Republic of Austria","from":1945,"to":2026,"qid":"Q40","label":"奥地利","article":"Austria","reason":"现代奥地利误关联国家历史主题条目"},
+  {"name":"Denmark","from":1901,"to":2026,"qid":"Q35","label":"丹麦","article":"Denmark","reason":"现代丹麦误关联中世纪国王克里斯托弗二世"},
+  {"name":"Georgia","from":1991,"to":2026,"qid":"Q230","label":"格鲁吉亚","article":"Georgia (country)","reason":"现代格鲁吉亚关联了错误实体"},
+  {"name":"Ukraine","from":1991,"to":2026,"qid":"Q212","label":"乌克兰","article":"Ukraine","reason":"现代乌克兰误关联斯洛博达乌克兰地区"},
+  {"name":"Mexico","from":1867,"to":2026,"qid":"Q96","label":"墨西哥","article":"Mexico","reason":"现代墨西哥误关联19世纪中央集权共和国"},
+  {"name":"Japan","from":1947,"to":2026,"qid":"Q17","label":"日本","article":"Japan","reason":"战后日本沿用日本帝国实体"},
+  {"name":"Sultanate of Brunei","from":1984,"to":2026,"qid":"Q921","label":"文莱","canonicalName":"Brunei","article":"Brunei","reason":"现代文莱误关联历史汶莱帝国"},
+  {"name":"Micronesia","from":1986,"to":2026,"qid":"Q702","label":"密克罗尼西亚联邦","article":"Federated States of Micronesia","reason":"主权国家误关联密克罗尼西亚地理区域"},
+  {"name":"Slovakia","from":1993,"to":2026,"qid":"Q214","label":"斯洛伐克","article":"Slovakia","reason":"现代斯洛伐克沿用捷克斯洛伐克实体"},
+  {"name":"Lebanon","from":1943,"to":2026,"qid":"Q822","label":"黎巴嫩","article":"Lebanon","reason":"独立黎巴嫩误关联法国委任统治地"},
+  {"name":"Saint Kitts","from":1983,"to":2026,"qid":"Q763","label":"圣基茨和尼维斯","canonicalName":"Saint Kitts and Nevis","article":"Saint Kitts and Nevis","reason":"国家档案误关联单一岛屿条目；轮廓仍受原始GIS概化影响"},
+  {"name":"French Fifth Republic","from":1958,"to":2026,"qid":"Q142","label":"法国","article":"France","reason":"现代法国使用国家实体读取连续的总统及国旗档案"},
+  {"name":"Third Hellenic Republic","from":1974,"to":2026,"qid":"Q41","label":"希腊","article":"Greece","reason":"现代希腊使用国家实体补全总统及政府首脑"},
+  {"name":"Romania","from":1989,"to":2026,"qid":"Q218","label":"罗马尼亚","article":"Romania","reason":"现代共和国误关联罗马尼亚王国"},
+  {"name":"Éire","from":1937,"to":2026,"qid":"Q27","label":"爱尔兰","article":"Ireland","reason":"爱尔兰国家档案误关联地名词汇条目"},
+  {"name":"Guinea","from":1958,"to":2026,"qid":"Q1006","label":"几内亚","article":"Guinea","reason":"几内亚误关联赤道几内亚，导致国旗与领导人串国"},
+  {"name":"Mali Federation","from":1960,"to":2026,"qid":"Q912","label":"马里","canonicalName":"Mali","article":"Mali","reason":"独立后的马里沿用已经解体的马里联邦实体"},
+  {"name":"Republic of Yemen","from":1990,"to":2026,"qid":"Q805","label":"也门","article":"Yemen","reason":"统一也门误关联原南也门实体；地方控制仍需另行核对"},
+  {"name":"British Territory - Bermuda","from":1901,"to":2026,"qid":"Q23635","label":"百慕大","article":"Bermuda","reason":"具体领地误关联英国海外领地总类，无法取得本地旗帜"},
+  {"name":"British Territory - South Georgia and the South Sandwich Islands","from":1985,"to":2026,"qid":"Q35086","label":"南乔治亚和南桑威奇群岛","article":"South Georgia and the South Sandwich Islands","reason":"具体领地误关联英国海外领地总类"},
+  {"name":"British Territory - Falkland Islands","from":1901,"to":2026,"qid":"Q9648","label":"福克兰群岛","article":"Falkland Islands","reason":"具体领地误关联英国海外领地总类"},
+  {"name":"Netherlands Antilles","from":2010,"to":2026,"qid":"Q55","label":"荷兰加勒比领地","canonicalName":"Dutch Caribbean territories","article":"Dutch Caribbean","reason":"2010年解体后的荷属安的列斯记录改为明确的地理分组，采用荷兰代表旗，不虚构统一行政政权","sovereignName":"Netherlands","sovereignQid":"Q55","territoryType":"overseas"}
+ ]
+}

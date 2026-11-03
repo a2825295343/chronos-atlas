@@ -1,0 +1,13 @@
+import type {Geometry} from 'geojson';
+export const MIN_YEAR:number;export const MAX_YEAR:number;
+export const TIME_STOPS:number[][];
+export function positionToYear(n:number):number;
+export function yearToPosition(n:number):number;
+export function formatYear(n:number):string;
+export function snapshotForYear<T extends {year:number}>(entries:T[],year:number):T;
+export function nextHistoricalYear(n:number,direction?:number):number;
+export function colorForName(name:string):string;
+export function areaKm2(g:Geometry):number;
+export function featureCenter(g:Geometry):[number,number];
+export function territoryBounds(geometries:Geometry[]):[[number,number],[number,number]]|undefined;
+export function pointInGeometry(p:number[],g:Geometry):boolean;

@@ -1,0 +1,14 @@
+{
+ "identityCorrections":[
+  {"name":"Ngô Dynasty","from":965,"to":967,"qid":"local:vietnam-warlords","label":"越南诸使君","canonicalName":"Twelve Warlords period","article":"Anarchy of the 12 Warlords","reason":"吴朝结束后的诸使君混战时期；沿用的整体轮廓不表示统一政权"},
+  {"name":"Ngô Dynasty","from":968,"to":979,"qid":"Q1372154","label":"丁朝","canonicalName":"Dinh Dynasty","article":"Đinh dynasty","reason":"吴朝名称被错误沿用至后续朝代"},
+  {"name":"Ngô Dynasty","from":980,"to":1008,"qid":"Q1317884","label":"前黎朝","canonicalName":"Early Le Dynasty","article":"Early Lê dynasty","reason":"吴朝名称被错误沿用至前黎朝"},
+  {"name":"Ngô Dynasty","from":1009,"to":1224,"qid":"Q878309","label":"李朝","canonicalName":"Ly Dynasty","article":"Lý dynasty","reason":"吴朝名称被错误沿用至李朝"},
+  {"name":"Ngô Dynasty","from":1225,"to":1399,"qid":"Q3111454","label":"陈朝","canonicalName":"Tran Dynasty","article":"Trần dynasty","reason":"吴朝名称被错误沿用至陈朝"},
+  {"name":"Ngô Dynasty","from":1400,"to":1406,"qid":"Q1209047","label":"胡朝","canonicalName":"Ho Dynasty","article":"Hồ dynasty","reason":"吴朝名称被错误沿用至胡朝"},
+  {"name":"Khmer Empire","from":1431,"to":1867,"qid":"Q4919413","label":"柬埔寨","article":"Post-Angkor period","reason":"吴哥时期帝国名称被沿用到后吴哥时代；改用柬埔寨通称，边界仍为原始概化GIS"},
+  {"name":"Grand Duchy of Kraków","from":1100,"to":1400,"qid":"Q11750541","label":"克拉科夫公国","article":"Duchy of Kraków","reason":"中世纪克拉科夫公国误指向1846年大公国"}
+ ],
+ "sources":["https://vnmh.com.vn/en/Articles/3157/permanent-exhibitions","https://www.baotanglichsutphcm.com.vn/en-US/exhibition/permanent-exhibition/history-of-vietnam-from-the-prehistory-to-the-nguyen-dynasty/room-5-tran-ho-dynasties-1226-1407","https://www.metmuseum.org/toah/ht/08/sse.html"],
+ "precision":"政权年代和实体修正，继承原始GIS分期边界；不冒称各次继位时的实测疆界。越南1225—1226年交接在年度分辨率下以1225年末代表状态显示。"
+}

@@ -1,0 +1,595 @@
+{
+  "Q43915": {
+    "house": "奥托王朝（萨克森）",
+    "source": "https://www.metmuseum.org/pt/essays/ottonian-art",
+    "titles": []
+  },
+  "Q103556": {
+    "house": "奥托王朝（萨克森）",
+    "source": "https://www.metmuseum.org/pt/essays/ottonian-art",
+    "titles": []
+  },
+  "Q152256": {
+    "house": "萨利安王朝",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q153023": {
+    "house": "萨利安王朝",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q60094": {
+    "house": "萨利安王朝",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q151707": {
+    "house": "萨利安王朝",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q455181": {
+    "house": "萨利安王朝",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q77189": {
+    "house": "苏普林堡家族",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q157133": {
+    "house": "霍亨斯陶芬王朝（士瓦本）",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q79789": {
+    "house": "霍亨斯陶芬王朝（士瓦本）",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q150953": {
+    "house": "霍亨斯陶芬王朝（士瓦本）",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": [
+      {
+        "polity": "Kingdom of Sicily",
+        "label": "西西里王国",
+        "role": "西西里国王",
+        "to": 1197,
+        "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+        "from": 1194
+      }
+    ]
+  },
+  "Q121130": {
+    "house": "霍亨斯陶芬王朝（士瓦本）",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q130221": {
+    "house": "霍亨斯陶芬王朝（士瓦本）",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": [
+      {
+        "polity": "Kingdom of Sicily",
+        "label": "西西里王国",
+        "role": "西西里国王",
+        "to": 1250,
+        "source": "https://www.deutschlandmuseum.de/en/history/calendar/1220-04-26-consolidation-of-territorial-rule-in-the-holy-roman-empire/",
+        "from": 1198
+      }
+    ]
+  },
+  "Q151457": {
+    "house": "韦尔夫家族",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": []
+  },
+  "Q76956": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": []
+  },
+  "Q153956": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "奥地利公爵",
+        "to": 1308,
+        "source": "https://www.wikidata.org/wiki/Q153956",
+        "from": 1282
+      }
+    ]
+  },
+  "Q157112": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1439,
+        "source": "https://www.wikidata.org/wiki/Q157112",
+        "from": 1437
+      },
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1439,
+        "source": "https://www.wikidata.org/wiki/Q157112",
+        "from": 1437
+      },
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "奥地利公爵",
+        "to": 1439,
+        "source": "https://www.wikidata.org/wiki/Q157112",
+        "from": 1404
+      }
+    ]
+  },
+  "Q150966": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "内奥地利领地君主",
+        "to": 1493,
+        "source": "https://www.wikidata.org/wiki/Q150966",
+        "from": 1424
+      }
+    ]
+  },
+  "Q150726": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "奥地利世袭领地君主",
+        "to": 1519,
+        "source": "https://www.wikidata.org/wiki/Q150726",
+        "from": 1493
+      }
+    ]
+  },
+  "Q32500": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "奥地利世袭领地君主",
+        "to": 1521,
+        "source": "https://www.wikidata.org/wiki/Q32500",
+        "from": 1519
+      },
+      {
+        "polity": "Kingdom of Spain",
+        "label": "西班牙王国",
+        "role": "西班牙国王卡洛斯一世",
+        "to": 1556,
+        "source": "https://www.galeriadelascoleccionesreales.es/en/monarch/charles-i-of-spain-and-v-holy-roman-emperor/9a893ad5-cf48-d61e-68f0-a2e26e5642e3",
+        "from": 1516
+      },
+      {
+        "polity": "Burgundian Netherlands",
+        "label": "勃艮第尼德兰",
+        "role": "尼德兰各省领主",
+        "to": 1555,
+        "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+        "from": 1506
+      }
+    ]
+  },
+  "Q150611": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1564,
+        "source": "https://www.wikidata.org/wiki/Q150611",
+        "from": 1526
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1564,
+        "source": "https://www.wikidata.org/wiki/Q150611",
+        "from": 1526
+      },
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "奥地利大公",
+        "to": 1564,
+        "source": "https://www.wikidata.org/wiki/Q150611",
+        "from": 1521
+      }
+    ]
+  },
+  "Q150862": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1576,
+        "source": "https://www.wikidata.org/wiki/Q150862",
+        "from": 1563
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1576,
+        "source": "https://www.wikidata.org/wiki/Q150862",
+        "from": 1562
+      },
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "奥地利本部大公",
+        "to": 1576,
+        "source": "https://www.wikidata.org/wiki/Q150862",
+        "from": 1564
+      }
+    ]
+  },
+  "Q150586": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1608,
+        "source": "https://www.wikidata.org/wiki/Q150586",
+        "from": 1572
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1611,
+        "source": "https://www.wikidata.org/wiki/Q150586",
+        "from": 1575
+      }
+    ]
+  },
+  "Q152157": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1618,
+        "source": "https://www.wikidata.org/wiki/Q152157",
+        "from": 1608
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1617,
+        "source": "https://www.wikidata.org/wiki/Q152157",
+        "from": 1611
+      }
+    ]
+  },
+  "Q150599": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1637,
+        "source": "https://www.wikidata.org/wiki/Q150599",
+        "from": 1618
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1637,
+        "source": "https://www.wikidata.org/wiki/Q150599",
+        "from": 1617
+      },
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "哈布斯堡领地君主",
+        "to": 1637,
+        "source": "https://www.wikidata.org/wiki/Q150599",
+        "from": 1590
+      }
+    ]
+  },
+  "Q150575": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1657,
+        "source": "https://www.wikidata.org/wiki/Q150575",
+        "from": 1625
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1657,
+        "source": "https://www.wikidata.org/wiki/Q150575",
+        "from": 1627
+      }
+    ]
+  },
+  "Q150494": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1705,
+        "source": "https://www.wikidata.org/wiki/Q150494",
+        "from": 1655
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1705,
+        "source": "https://www.wikidata.org/wiki/Q150494",
+        "from": 1656
+      }
+    ]
+  },
+  "Q152480": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1711,
+        "source": "https://www.wikidata.org/wiki/Q152480",
+        "from": 1687
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1711,
+        "source": "https://www.wikidata.org/wiki/Q152480",
+        "from": 1705
+      }
+    ]
+  },
+  "Q150665": {
+    "house": "哈布斯堡家族",
+    "source": "https://www.metmuseum.org/fr/essays/the-holy-roman-empire-and-the-habsburgs-1400-1600",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1740,
+        "source": "https://www.wikidata.org/wiki/Q150665",
+        "from": 1711
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1740,
+        "source": "https://www.wikidata.org/wiki/Q150665",
+        "from": 1711
+      }
+    ]
+  },
+  "Q152717": {
+    "house": "卢森堡家族",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": [
+      {
+        "polity": "County of Luxembourg",
+        "label": "卢森堡伯国",
+        "role": "卢森堡伯爵",
+        "to": 1313,
+        "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+        "from": 1288
+      }
+    ]
+  },
+  "Q155669": {
+    "house": "卢森堡家族",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": [
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1378,
+        "source": "https://www.wikidata.org/wiki/Q155669",
+        "from": 1346
+      }
+    ]
+  },
+  "Q57124": {
+    "house": "卢森堡家族",
+    "source": "https://82nd-and-fifth.metmuseum.org/toah/ht/07/euwc.html",
+    "titles": [
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1437,
+        "source": "https://www.wikidata.org/wiki/Q57124",
+        "from": 1419
+      },
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1437,
+        "source": "https://www.wikidata.org/wiki/Q57124",
+        "from": 1387
+      }
+    ]
+  },
+  "Q76736": {
+    "house": "维特尔斯巴赫家族",
+    "source": "https://www.bundesbank.de/resource/blob/607670/b52f7cb474e019a94f14ac3f768c99a2/472B63F073F071307366337C94F8C870/early-modern-gold-coins-data.pdf",
+    "titles": [
+      {
+        "polity": "Electorate of Bavaria",
+        "label": "巴伐利亚选侯国",
+        "role": "巴伐利亚选侯",
+        "to": 1745,
+        "source": "https://www.bundesbank.de/resource/blob/607670/b52f7cb474e019a94f14ac3f768c99a2/472B63F073F071307366337C94F8C870/early-modern-gold-coins-data.pdf",
+        "from": 1726
+      }
+    ]
+  },
+  "Q151075": {
+    "house": "洛林家族",
+    "source": "https://www.habsburger.net/en/persons/habsburg-emperor/franz-i-stephan-lorraine",
+    "titles": [
+      {
+        "polity": "Grand Duchy of Tuscany",
+        "label": "托斯卡纳大公国",
+        "role": "托斯卡纳大公",
+        "to": 1765,
+        "source": "https://www.habsburger.net/en/persons/habsburg-emperor/franz-i-stephan-lorraine",
+        "from": 1737
+      },
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "与玛丽亚·特蕾莎共治",
+        "to": 1765,
+        "source": "https://www.habsburger.net/en/persons/habsburg-emperor/franz-i-stephan-lorraine",
+        "from": 1740
+      }
+    ]
+  },
+  "Q76555": {
+    "house": "哈布斯堡－洛林家族",
+    "source": "https://www.habsburger.net/en/chapter/tuscany-habsburg-secundogeniture",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1790,
+        "source": "https://www.wikidata.org/wiki/Q76555",
+        "from": 1780
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1790,
+        "source": "https://www.wikidata.org/wiki/Q76555",
+        "from": 1780
+      }
+    ]
+  },
+  "Q151321": {
+    "house": "哈布斯堡－洛林家族",
+    "source": "https://www.habsburger.net/en/chapter/tuscany-habsburg-secundogeniture",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1792,
+        "source": "https://www.wikidata.org/wiki/Q151321",
+        "from": 1790
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1792,
+        "source": "https://www.wikidata.org/wiki/Q151321",
+        "from": 1790
+      },
+      {
+        "polity": "Grand Duchy of Tuscany",
+        "label": "托斯卡纳大公国",
+        "role": "托斯卡纳大公",
+        "to": 1790,
+        "source": "https://www.habsburger.net/en/chapter/tuscany-habsburg-secundogeniture",
+        "from": 1765
+      }
+    ]
+  },
+  "Q130834": {
+    "house": "哈布斯堡－洛林家族",
+    "source": "https://www.habsburger.net/en/chapter/tuscany-habsburg-secundogeniture",
+    "titles": [
+      {
+        "polity": "Kingdom of Hungary",
+        "label": "匈牙利王国",
+        "role": "匈牙利国王",
+        "to": 1806,
+        "source": "https://www.wikidata.org/wiki/Q130834",
+        "from": 1792
+      },
+      {
+        "polity": "Kingdom of Bohemia",
+        "label": "波希米亚王国",
+        "role": "波希米亚国王",
+        "to": 1806,
+        "source": "https://www.wikidata.org/wiki/Q130834",
+        "from": 1792
+      },
+      {
+        "polity": "Austrian Hereditary Lands",
+        "label": "哈布斯堡奥地利领地",
+        "role": "奥地利大公",
+        "to": 1803,
+        "source": "https://www.wikidata.org/wiki/Q130834",
+        "from": 1792
+      },
+      {
+        "polity": "Austrian Empire",
+        "label": "奥地利帝国",
+        "role": "奥地利皇帝弗朗茨一世",
+        "to": 1806,
+        "source": "https://www.habsburger.net/en/persons/habsburg-emperor/franz-ii-i",
+        "from": 1804
+      }
+    ]
+  }
+}

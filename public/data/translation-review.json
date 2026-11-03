@@ -1,0 +1,7 @@
+{
+  "reviewedTerms": 200,
+  "reusedTranslations": 4919,
+  "chineseBriefs": 703,
+  "method": "界面与专业术语人工校正；原始简介缺中文时以原文类别和地理线索生成中文简述，原文保留于资料页；少数专名保留原文，不伪造译名。",
+  "externalTranslationStatus": "批量机器翻译服务限流，未把失败请求当作已翻译。"
+}

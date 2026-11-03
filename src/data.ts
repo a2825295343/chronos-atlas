@@ -1,0 +1,122 @@
+import textNames from './localization/text.zh.json';
+import displayNames from './localization/display-names.zh.json';
+import temporalNames from './localization/temporal.zh.json';
+import translatedNames from './localization/names.zh.json';
+import translationSources from './localization/provenance.json';
+export type AtlasEvent={year:number;title:string;description:string;type:'政治'|'战争'|'文明'|'探索'|'科技';location:[number,number];source:string};
+const wiki=(name:string)=>`https://zh.wikipedia.org/wiki/${encodeURIComponent(name)}`;
+export const events:AtlasEvent[]=[
+ {year:-8000,title:'纳塔鲁克暴力创伤遗存（约年）',description:'肯尼亚纳塔鲁克遗址发现有暴力创伤的人类遗存，常被解释为早期群体冲突；单次屠杀与埋藏过程等解释仍有学术争论。遗存约距今一万年，图示取前8000年定位，不代表精确编年，也无法据此确定具名国家、统治者或双方兵力。',type:'战争',location:[35.85,2.84],source:'https://www.nature.com/articles/nature16477'},
+ {year:1444,title:'瓦尔纳战役',description:'11 月 10 日，穆拉德二世率奥斯曼军队击败十字军，波兰与匈牙利国王瓦迪斯瓦夫三世战死；共主关系随之终止。',type:'战争',location:[27.86,43.22],source:'https://pressto.amu.edu.pl/index.php/bp/article/view/54681'},
+ {year:1444,title:'图尔停战与英法王室婚约',description:'英法议和并安排亨利六世与安茹的玛格丽特的婚约，正式婚礼在 1445 年。停战阶段仍属于百年战争的大背景。',type:'政治',location:[.68,47.39],source:'https://history.queens.cam.ac.uk/people/foundresses-and-patronesses/margaret-anjou'},
+ {year:1444,title:'奥斯曼苏丹更替',description:'穆拉德二世退位，穆罕默德二世开始第一次在位。年度档案同时列出交接双方；穆拉德二世于 1446 年复位。',type:'政治',location:[26.56,41.68],source:'https://islamansiklopedisi.org.tr/mehmed-ii'},
+ {year:1449,title:'土木之变',description:'明英宗朱祁镇亲征瓦剌，兵败被俘。朱祁钰继位，改元景泰；同年的统治者记录体现这一交接。',type:'战争',location:[115.54,40.40],source:wiki('土木之变')},
+ {year:-123000,title:'早期人类的世界',description:'这一时期展示的是古人类分布研究范围，不能理解为国家或明确的政治边界。',type:'文明',location:[30,5],source:wiki('人类演化')},
+ {year:-10000,title:'新石器时代的开端',description:'部分地区逐渐出现农业与定居生活。这是漫长的区域性过程，年代为约数。',type:'文明',location:[37,36],source:wiki('新石器革命')},
+ {year:-3500,title:'城市文明在两河流域兴起',description:'乌鲁克等城市的发展标志着人类社会组织的一次重要转变，时间为约数。',type:'文明',location:[45.6,31.3],source:wiki('乌鲁克时期')},
+ {year:-3100,title:'古埃及早期王朝',description:'上下埃及统一的传统年代，具体过程与绝对年代仍存在讨论。',type:'政治',location:[31.2,30],source:wiki('埃及第一王朝')},
+ {year:-2560,title:'吉萨大金字塔',description:'胡夫金字塔建成的大致年代，体现古王国时期的国家组织与工程能力。',type:'文明',location:[31.13,29.98],source:wiki('胡夫金字塔')},
+ {year:-1754,title:'汉谟拉比法典',description:'古巴比伦的重要法律文献，年代为约数。',type:'文明',location:[44.4,32.5],source:wiki('汉谟拉比法典')},
+ {year:-1200,title:'青铜时代晚期的动荡',description:'东地中海多个政治中心衰落。这一事件群持续数十年，不能简化为单一年份。',type:'文明',location:[29,37],source:wiki('青铜时代晚期崩溃')},
+ {year:-550,title:'阿契美尼德帝国兴起',description:'居鲁士二世击败米底，波斯帝国开始扩张。',type:'政治',location:[48.5,34.8],source:wiki('阿契美尼德王朝')},
+ {year:-490,title:'马拉松战役',description:'雅典等希腊城邦击败波斯远征军。',type:'战争',location:[23.97,38.15],source:wiki('马拉松战役')},
+ {year:-334,title:'亚历山大东征',description:'马其顿军队渡过赫勒斯滂海峡，开启对波斯帝国的远征。',type:'战争',location:[26.5,40.2],source:wiki('亚历山大大帝')},
+ {year:-323,title:'亚历山大大帝逝世',description:'亚历山大在巴比伦去世，随后继业者战争改变了帝国版图。',type:'政治',location:[44.4,32.5],source:wiki('亚历山大大帝')},
+ {year:-221,title:'秦统一六国',description:'秦王政完成对六国的征服，建立统一的帝国。',type:'政治',location:[108.7,34.3],source:wiki('秦灭六国之战')},
+ {year:-202,title:'汉朝建立',description:'刘邦即皇帝位，汉帝国进入历史舞台。',type:'政治',location:[108.9,34.3],source:wiki('汉朝')},
+ {year:-27,title:'罗马进入帝国时代',description:'屋大维获得“奥古斯都”称号，罗马元首制逐渐确立。',type:'政治',location:[12.5,41.9],source:wiki('奥古斯都')},
+ {year:79,title:'维苏威火山喷发',description:'庞贝与赫库兰尼姆等城市被火山物质掩埋。',type:'文明',location:[14.49,40.75],source:wiki('庞贝')},
+ {year:98,title:'图拉真继任罗马皇帝',description:'图拉真即位；在此后的统治中，罗马帝国达到其最大疆域。',type:'政治',location:[12.5,41.9],source:wiki('图拉真')},
+ {year:100,title:'古典世界的文明交汇',description:'约公元 100 年，罗马、安息、贵霜与东汉通过横贯欧亚大陆的贸易网络发生联系。这是时代背景条目。',type:'文明',location:[64,39],source:wiki('丝绸之路')},
+ {year:105,title:'蔡伦改进造纸术',description:'传统史籍将蔡伦奏报造纸工艺记载于这一年；纸的出现早于此年。',type:'科技',location:[112.45,34.62],source:wiki('蔡伦')},
+ {year:106,title:'达契亚成为罗马行省',description:'第二次达契亚战争结束，罗马在多瑙河以北建立行省。',type:'战争',location:[23,46],source:wiki('达契亚战争')},
+ {year:117,title:'罗马帝国的疆域顶点',description:'图拉真统治末期，罗马向两河流域的扩张达到顶点；其中部分征服很快被放弃。',type:'战争',location:[43,34],source:wiki('图拉真')},
+ {year:184,title:'黄巾起义',description:'东汉爆发大规模民变，王朝统治进一步动摇。',type:'战争',location:[115,36],source:wiki('黄巾之乱')},
+ {year:220,title:'东汉终结',description:'曹丕代汉建魏，中国进入三国时期。',type:'政治',location:[112.45,34.62],source:wiki('三国')},
+ {year:313,title:'米兰敕令',description:'罗马帝国内的基督徒获得宗教宽容。',type:'政治',location:[9.19,45.46],source:wiki('米兰敕令')},
+ {year:395,title:'罗马帝国分治',description:'狄奥多西一世去世，帝国由两个儿子分别统治。',type:'政治',location:[28.97,41],source:wiki('罗马帝国')},
+ {year:476,title:'西罗马皇帝被废黜',description:'奥多亚塞废黜罗慕路斯·奥古斯都，传统上被视为西罗马帝国结束的标志。',type:'政治',location:[12.2,44.4],source:wiki('西罗马帝国')},
+ {year:618,title:'唐朝建立',description:'李渊在长安称帝，建立唐朝。',type:'政治',location:[108.94,34.34],source:wiki('唐朝')},
+ {year:622,title:'希吉拉',description:'穆罕默德及其追随者迁往麦地那，后被定为伊斯兰历纪元。',type:'文明',location:[39.61,24.47],source:wiki('希吉拉')},
+ {year:800,title:'查理曼加冕',description:'查理曼在罗马获加冕为皇帝。',type:'政治',location:[12.5,41.9],source:wiki('查理大帝')},
+ {year:960,title:'宋朝建立',description:'赵匡胤建立宋朝，以开封为都。',type:'政治',location:[114.3,34.8],source:wiki('宋朝')},
+ {year:1066,title:'诺曼征服英格兰',description:'威廉在黑斯廷斯战役获胜，英格兰的统治格局发生改变。',type:'战争',location:[0.49,50.91],source:wiki('诺曼征服英格兰')},
+ {year:1206,title:'蒙古帝国建立',description:'铁木真被推举为成吉思汗，草原诸部逐步统一。',type:'政治',location:[103,47],source:wiki('蒙古帝国')},
+ {year:1279,title:'崖山之战',description:'南宋覆亡，元完成对中国主要地区的统一。',type:'战争',location:[113.08,22.27],source:wiki('崖山海战')},
+ {year:1347,title:'黑死病进入地中海',description:'鼠疫大流行在随后数年对欧洲、西亚与北非社会造成深远影响。',type:'文明',location:[15.55,38.19],source:wiki('黑死病')},
+ {year:1368,title:'明朝建立',description:'朱元璋在应天府称帝。',type:'政治',location:[118.8,32.06],source:wiki('明朝')},
+ {year:1405,title:'郑和首次下西洋',description:'明朝船队从中国出发，开始一系列印度洋航行。',type:'探索',location:[121.1,31.5],source:wiki('郑和下西洋')},
+ {year:1453,title:'君士坦丁堡陷落',description:'奥斯曼军队攻下君士坦丁堡，拜占庭帝国结束。',type:'战争',location:[28.98,41.01],source:wiki('君士坦丁堡的陷落')},
+ {year:1492,title:'哥伦布抵达美洲',description:'哥伦布船队抵达加勒比海，跨大西洋交流进入新的阶段。',type:'探索',location:[-74.5,24],source:wiki('哥伦布')},
+ {year:1517,title:'宗教改革',description:'路德的《九十五条论纲》成为欧洲宗教改革的标志性事件。',type:'文明',location:[12.65,51.87],source:wiki('宗教改革')},
+ {year:1644,title:'明清鼎革',description:'北京陷落，清军入关，中国政治版图经历重大转变。',type:'战争',location:[116.4,39.9],source:wiki('明清战争')},
+ {year:1648,title:'威斯特伐利亚和约',description:'一系列和约结束三十年战争。',type:'政治',location:[7.63,51.96],source:wiki('威斯特伐利亚和约')},
+ {year:1776,title:'美国独立宣言',description:'北美十三殖民地通过独立宣言。',type:'政治',location:[-75.16,39.95],source:wiki('美国独立宣言')},
+ {year:1789,title:'法国大革命',description:'法国政治与社会秩序发生深刻变革。',type:'政治',location:[2.35,48.86],source:wiki('法国大革命')},
+ {year:1815,title:'维也纳会议',description:'拿破仑战争后的欧洲秩序重新确立。',type:'政治',location:[16.37,48.2],source:wiki('维也纳会议')},
+ {year:1914,title:'第一次世界大战爆发',description:'欧洲危机演变为全球战争。占领图层提供比利时战场的近似示意。',type:'战争',location:[18.42,43.86],source:wiki('第一次世界大战')},
+ {year:1918,title:'第一次世界大战停战',description:'11 月停战使西线战事结束，战后条约随后重塑国界。',type:'战争',location:[2.9,49.4],source:wiki('第一次贡比涅停战协定')},
+ {year:1939,title:'第二次世界大战爆发',description:'德国入侵波兰，英法随后对德宣战。',type:'战争',location:[21.01,52.23],source:wiki('第二次世界大战')},
+ {year:1940,title:'法国战役与占领',description:'法国战败后，北部与大西洋沿岸受到德国占领；占领区范围在图中为概化示意。',type:'战争',location:[2.35,48.86],source:wiki('德国占领法国时期')},
+ {year:1941,title:'巴巴罗萨行动',description:'德国及其盟国向苏联发动大规模进攻。地图未提供逐日东线战线。',type:'战争',location:[23.7,52.1],source:wiki('巴巴罗萨行动')},
+ {year:1945,title:'第二次世界大战结束',description:'战争在欧洲与亚洲先后结束，战后国际秩序逐步建立。',type:'战争',location:[13.4,52.5],source:wiki('第二次世界大战')},
+ {year:1949,title:'中华人民共和国成立',description:'中华人民共和国在北京宣告成立。',type:'政治',location:[116.4,39.9],source:wiki('中华人民共和国')},
+ {year:1961,title:'人类首次进入太空',description:'加加林乘东方一号完成首次载人轨道飞行。',type:'科技',location:[63.3,45.9],source:wiki('东方一号')},
+ {year:1969,title:'阿波罗 11 号登月',description:'人类首次踏上月球。',type:'科技',location:[-80.6,28.6],source:wiki('阿波罗11号')},
+ {year:1989,title:'柏林墙开放',description:'柏林墙开放，欧洲冷战格局随之转变。',type:'政治',location:[13.4,52.5],source:wiki('柏林墙倒塌')},
+ {year:1991,title:'苏联解体',description:'苏联解体，欧亚大陆出现多个独立国家。',type:'政治',location:[37.62,55.75],source:wiki('苏联解体')},
+ {year:2000,title:'千年之交',description:'国际空间站迎来首批长期驻留乘员，人类持续驻留太空的时代开始。',type:'科技',location:[63.3,45.9],source:wiki('国际空间站')},
+ {year:2010,title:'本地疆界快照的最近年份',description:'当前离线数据的最新疆界为 2010 年；之后的年份沿用该快照，不代表当年的实时疆界。',type:'文明',location:[30,30],source:'https://github.com/aourednik/historical-basemaps'},
+];
+export const names:Record<string,string>={'Roman Empire':'罗马帝国','Han':'东汉','Parthian Empire':'安息帝国','Kushan Empire':'贵霜帝国','Meroe':'麦罗埃王国','Aksum':'阿克苏姆','Dacia':'达契亚','Armenia':'亚美尼亚','Bosporian Kingdom':'博斯普鲁斯王国','Garamantes':'加拉曼特','Sarmatians':'萨尔马提亚','Germanic tribes':'日耳曼诸部','Xiongnu':'匈奴','Xianbei':'鲜卑','Goguryeo':'高句丽','Silla':'新罗','Baekje':'百济','Japan':'日本','China':'中国','India':'印度','France':'法国','Germany':'德国','United Kingdom':'英国','Britain':'不列颠','England':'英格兰','Russia':'俄罗斯','Russian Empire':'俄罗斯帝国','Ottoman Empire':'奥斯曼帝国','Mongol Empire':'蒙古帝国','Yuan':'元','Ming':'明','Qing':'清','Tang':'唐','Song':'宋','Jin':'金','Liao':'辽','Xia':'夏','Qin':'秦','Zhou':'周','Shang':'商','Egypt':'埃及','Persia':'波斯','Achaemenid Empire':'阿契美尼德帝国','Seleucid Empire':'塞琉古帝国','Ptolemaic Egypt':'托勒密埃及','Byzantine Empire':'拜占庭帝国','Eastern Roman Empire':'东罗马帝国','Western Roman Empire':'西罗马帝国','Sassanid Empire':'萨珊帝国','Sasanian Empire':'萨珊帝国','Sasanids':'萨珊王朝','Spain':'西班牙','Portugal':'葡萄牙','Italy':'意大利','Greece':'希腊','Turkey':'土耳其','USA':'美国','United States':'美国','United States of America':'美利坚合众国','Canada':'加拿大','Mexico':'墨西哥','Brazil':'巴西','Argentina':'阿根廷','Australia':'澳大利亚','New Zealand':'新西兰','Sweden':'瑞典','Norway':'挪威','Denmark':'丹麦','Finland':'芬兰','Poland':'波兰','Ukraine':'乌克兰','Belgium':'比利时','Netherlands':'荷兰','Switzerland':'瑞士','Austria':'奥地利','Hungary':'匈牙利','Romania':'罗马尼亚','Bulgaria':'保加利亚','Serbia':'塞尔维亚','Albania':'阿尔巴尼亚','Ireland':'爱尔兰','Scotland':'苏格兰','Iceland':'冰岛','Iran':'伊朗','Iraq':'伊拉克','Syria':'叙利亚','Saudi Arabia':'沙特阿拉伯','Afghanistan':'阿富汗','Pakistan':'巴基斯坦','Bangladesh':'孟加拉国','Nepal':'尼泊尔','Tibet':'西藏','Bhutan':'不丹','Burma':'缅甸','Myanmar':'缅甸','Thailand':'泰国','Vietnam':'越南','Laos':'老挝','Cambodia':'柬埔寨','Malaysia':'马来西亚','Indonesia':'印度尼西亚','Philippines':'菲律宾','Korea':'朝鲜','North Korea':'朝鲜','South Korea':'韩国','Taiwan':'台湾','Israel':'以色列','Palestine':'巴勒斯坦','Jordan':'约旦','Lebanon':'黎巴嫩','Morocco':'摩洛哥','Algeria':'阿尔及利亚','Tunisia':'突尼斯','Libya':'利比亚','Sudan':'苏丹','Ethiopia':'埃塞俄比亚','South Africa':'南非','Congo':'刚果','Kenya':'肯尼亚','Nigeria':'尼日利亚','Mali':'马里','Ghana':'加纳','Madagascar':'马达加斯加','Peru':'秘鲁','Chile':'智利','Colombia':'哥伦比亚','Venezuela':'委内瑞拉','Bolivia':'玻利维亚','Cuba':'古巴','Aztec Empire':'阿兹特克帝国','Inca Empire':'印加帝国','Maya':'玛雅','Holy Roman Empire':'神圣罗马帝国','Franks':'法兰克','Frankish Empire':'法兰克帝国','Abbasid Caliphate':'阿拔斯哈里发国','Umayyad Caliphate':'倭马亚哈里发国','Mughal Empire':'莫卧儿帝国','British Empire':'大英帝国','Soviet Union':'苏联','USSR':'苏联','Nazi Germany':'纳粹德国','German Empire':'德意志帝国','Austria-Hungary':'奥匈帝国','Homo erectus':'直立人','Homo heidelbergensis':'海德堡人','Neanderthal':'尼安德特人','Hunters-gatherers':'狩猎采集群体','Austronesians':'南岛语族群体','Aboriginal tribes':'原住民部落','Jōmon':'绳文文化','Bantu':'班图族群','Indus valley civilization':'印度河文明','Elam':'埃兰','Sumer':'苏美尔','Hittites':'赫梯','Minoan':'米诺斯文明'};
+export const localName=(name:string)=>{const key=(name||'').trim().replace(/\s+/g,' ');return (displayNames as Record<string,string>)[key]||(textNames as Record<string,string>)[key]||(temporalNames as Record<string,string>)[key]||(translatedNames as Record<string,string>)[key]||names[key]||(textNames as Record<string,string>)[key]||key;};
+export const nameTranslationStatus=(name:string)=>{const source=(translationSources as Record<string,string>)[(name||'').trim().replace(/\s+/g,' ')];return source==='machine-draft'?'自动译名 · 尚待史学核定':source==='transliteration-draft'?'暂用音译 · 保留原文供核对':(source==='wikipedia-zh'||source==='wikidata-zh')?'中文百科对应译名':'已校对常用译名';};
+export type Place={id:string;position:[number,number];names:[number,string][];description:string;source:string};
+export const places:Place[]=[
+ {id:'rome',position:[12.496,41.903],names:[[-123000,'罗马地区'],[-753,'罗马']],description:'台伯河畔的城市，古典时期的政治与文化中心。',source:wiki('罗马')},
+ {id:'istanbul',position:[28.978,41.008],names:[[-123000,'博斯普鲁斯海峡'],[-660,'拜占庭'],[330,'君士坦丁堡'],[1453,'伊斯坦布尔']],description:'横跨欧亚的海峡城市，历经希腊、罗马、拜占庭与奥斯曼等时代。部分名称曾长期并用。',source:wiki('伊斯坦布尔')},
+ {id:'xian',position:[108.94,34.34],names:[[-123000,'关中'],[-202,'长安'],[904,'京兆'],[1369,'西安']],description:'渭河流域的历史城市。这里展示城市核心区的名称沿革。',source:wiki('西安历史')},
+ {id:'luoyang',position:[112.45,34.62],names:[[-123000,'洛水流域'],[-770,'洛邑'],[-202,'雒阳'],[25,'雒阳'],[220,'洛阳']],description:'东汉都城所在地区，中国古代重要的政治中心。',source:wiki('洛阳')},
+ {id:'beijing',position:[116.4,39.9],names:[[-123000,'华北北缘'],[-1045,'蓟'],[938,'南京析津府'],[1153,'中都'],[1272,'大都'],[1368,'北平'],[1403,'北京'],[1928,'北平'],[1949,'北京']],description:'燕山与华北平原相接的都城区域。名称沿革为核心城市简化序列。',source:wiki('北京历史')},
+ {id:'nanjing',position:[118.8,32.06],names:[[-123000,'长江下游'],[229,'建业'],[313,'建康'],[1368,'南京']],description:'长江下游的重要城市，多个王朝在此建都。',source:wiki('南京历史')},
+ {id:'alexandria',position:[29.92,31.2],names:[[-123000,'尼罗河三角洲'],[-331,'亚历山大里亚']],description:'地中海东部重要港口与知识中心。',source:wiki('亚历山大港')},
+ {id:'cairo',position:[31.24,30.04],names:[[-123000,'尼罗河谷'],[641,'福斯塔特'],[969,'开罗']],description:'尼罗河畔的都会区；福斯塔特与开罗为相邻的不同历史城市核心。',source:wiki('开罗')},
+ {id:'london',position:[-0.128,51.507],names:[[-123000,'泰晤士河谷'],[47,'伦丁尼姆'],[600,'伦敦']],description:'泰晤士河畔的城市，罗马时代建立的城市中心。',source:wiki('伦敦历史')},
+ {id:'paris',position:[2.35,48.86],names:[[-123000,'塞纳河谷'],[-52,'卢泰西亚'],[360,'巴黎']],description:'塞纳河中的岛屿及两岸发展而来的城市。',source:wiki('巴黎历史')},
+ {id:'baghdad',position:[44.37,33.31],names:[[-123000,'两河流域'],[762,'巴格达']],description:'阿拔斯时代建立的都城，位于底格里斯河畔。',source:wiki('巴格达')},
+ {id:'ctesiphon',position:[44.58,33.09],names:[[-123000,'底格里斯河谷'],[-120,'泰西封']],description:'安息与萨珊时代的重要王都，现代遗址位于伊拉克。',source:wiki('泰西封')},
+ {id:'athens',position:[23.73,37.98],names:[[-123000,'阿提卡'],[-1400,'雅典']],description:'古希腊城邦与文化中心，早期年代为概数。',source:wiki('雅典')},
+ {id:'jerusalem',position:[35.21,31.77],names:[[-123000,'犹地亚山地'],[-1800,'耶路撒冷'],[135,'埃利亚·卡皮托利纳'],[638,'耶路撒冷']],description:'多个宗教传统的圣城。不同语言中的称谓长期并存。',source:wiki('耶路撒冷历史')},
+ {id:'damascus',position:[36.29,33.51],names:[[-123000,'黎凡特内陆'],[-1500,'大马士革']],description:'连接地中海与内陆商路的历史城市。',source:wiki('大马士革')},
+ {id:'samarkand',position:[66.97,39.65],names:[[-123000,'粟特地区'],[-700,'撒马尔罕']],description:'丝绸之路上的绿洲城市。',source:wiki('撒马尔罕')},
+ {id:'delhi',position:[77.21,28.61],names:[[-123000,'恒河平原西缘'],[1000,'德里']],description:'南亚重要都城地区，名称序列为概化展示。',source:wiki('德里')},
+ {id:'patna',position:[85.14,25.61],names:[[-123000,'恒河中游'],[-490,'华氏城'],[1541,'巴特那']],description:'古代摩揭陀、孔雀与笈多等王朝的核心地区。',source:wiki('巴特那')},
+ {id:'kyoto',position:[135.77,35.01],names:[[-123000,'山城地区'],[794,'平安京'],[1100,'京都']],description:'日本古代都城。',source:wiki('京都')},
+ {id:'tokyo',position:[139.69,35.68],names:[[-123000,'关东平原'],[1457,'江户'],[1868,'东京']],description:'德川幕府所在地，明治时期改称东京。',source:wiki('东京')},
+ {id:'seoul',position:[126.98,37.57],names:[[-123000,'汉江流域'],[1394,'汉城'],[1910,'京城'],[1945,'首尔']],description:'朝鲜半岛汉江流域的城市。此处为简化名称序列。',source:wiki('首尔历史')},
+ {id:'moscow',position:[37.62,55.75],names:[[-123000,'东欧森林地带'],[1147,'莫斯科']],description:'莫斯科河畔的城市。1147 年是其首次见于文献的传统年代。',source:wiki('莫斯科')},
+ {id:'stpetersburg',position:[30.33,59.94],names:[[-123000,'涅瓦河口'],[1703,'圣彼得堡'],[1914,'彼得格勒'],[1924,'列宁格勒'],[1991,'圣彼得堡']],description:'波罗的海沿岸的港口城市，名称随政局多次变化。',source:wiki('圣彼得堡')},
+ {id:'berlin',position:[13.4,52.52],names:[[-123000,'施普雷河谷'],[1237,'柏林']],description:'德国的政治中心，早期为相邻聚落。',source:wiki('柏林历史')},
+ {id:'vienna',position:[16.37,48.21],names:[[-123000,'多瑙河谷'],[15,'文多博纳'],[881,'维也纳']],description:'多瑙河流域的重要城市与历史帝国中心。',source:wiki('维也纳')},
+ {id:'lisbon',position:[-9.14,38.72],names:[[-123000,'塔霍河口'],[-138,'奥利西波'],[1147,'里斯本']],description:'伊比利亚半岛西部港口。',source:wiki('里斯本')},
+ {id:'mexico',position:[-99.13,19.43],names:[[-123000,'墨西哥谷'],[1325,'特诺奇蒂特兰'],[1521,'墨西哥城']],description:'阿兹特克都城与现代墨西哥首都所在地区。',source:wiki('墨西哥城')},
+ {id:'newyork',position:[-74.01,40.71],names:[[-123000,'曼哈顿地区'],[1624,'新阿姆斯特丹'],[1664,'纽约']],description:'哈德逊河口的城市，名称反映荷兰与英国殖民时代的更替。',source:wiki('纽约历史')},
+ {id:'cusco',position:[-71.97,-13.53],names:[[-123000,'安第斯高原'],[1200,'库斯科']],description:'印加帝国的历史中心，早期年代为概数。',source:wiki('库斯科')},
+ {id:'timbuktu',position:[-3.01,16.77],names:[[-123000,'撒哈拉南缘'],[1100,'廷巴克图']],description:'跨撒哈拉贸易与伊斯兰学术的历史城市。',source:wiki('廷巴克图')},
+];
+export function placeName(p:Place,year:number){return p.names.filter(([start])=>start<=year).at(-1)?.[1]??p.names[0][1];}
+export type Profile={name:string;from:number;to:number;capital:string;government:string;religion:string;language:string;ruler:string;description:string;emblem:string;source:string};
+export const profiles:Profile[]=[
+ {name:'Roman Empire',from:98,to:117,capital:'罗马',government:'元首制',religion:'罗马多神信仰等',language:'拉丁语、希腊语等',ruler:'图拉真',description:'地中海连接起广阔的行省网络，军团、道路与城市共同维系着罗马世界。图拉真时代是帝国扩张的重要阶段。',emblem:'SPQR',source:wiki('图拉真')},
+ {name:'Han',from:88,to:105,capital:'雒阳',government:'皇帝制',religion:'祖先祭祀、地方信仰等',language:'上古汉语等',ruler:'汉和帝 刘肇',description:'东汉王朝以雒阳为中心，郡县制度与丝路网络将帝国各地连接起来。',emblem:'漢',source:wiki('汉和帝')},
+ {name:'Parthian Empire',from:78,to:110,capital:'泰西封等王都',government:'阿尔沙克王朝君主制',religion:'伊朗诸信仰、希腊诸神等',language:'安息语、希腊语等',ruler:'帕科鲁斯二世（王位存在竞争）',description:'安息位于地中海与南亚之间，在欧亚贸易中占据关键位置，其西方长期与罗马交锋。',emblem:'𐭀',source:wiki('安息帝国')},
+ {name:'Ming',from:1398,to:1402,capital:'应天府',government:'皇帝制',religion:'儒家礼制、佛教、道教等',language:'汉语及多种地方语言',ruler:'建文帝 朱允炆',description:'明朝以应天府为政治中心，建文时期削藩引发靖难之役。',emblem:'明',source:wiki('建文帝')},
+ {name:'Ottoman Empire',from:1695,to:1703,capital:'君士坦丁堡',government:'苏丹制',religion:'伊斯兰教为主，包含多种宗教社群',language:'奥斯曼土耳其语等',ruler:'穆斯塔法二世',description:'横跨欧洲、亚洲与非洲的帝国。此时的奥斯曼正经历欧洲战争后的领土调整。',emblem:'☾',source:wiki('穆斯塔法二世')},
+ {name:'United Kingdom',from:1837,to:1901,capital:'伦敦',government:'君主立宪制',religion:'基督宗教等',language:'英语等',ruler:'维多利亚女王',description:'维多利亚时代见证工业化、全球贸易与殖民帝国的发展。殖民地和宗主国不等同于同一行政实体。',emblem:'UK',source:wiki('维多利亚时代')},
+];
+export type Occupation={id:string;from:number;to:number;title:string;occupier:string;sovereign:string;description:string;source:string;coordinates:number[][]};
+export const occupations:Occupation[]=[
+ {id:'belgium-ww1',from:1915,to:1917,title:'德军占领比利时 · 概化范围',occupier:'Germany',sovereign:'Belgium',description:'一战期间，比利时大部被德国占领；伊瑟河一带仍有比利时控制区。此多边形仅为区域级战局示意，不是逐日战线。',source:wiki('德国占领比利时时期_(第一次世界大战)'),coordinates:[[2.9,50.9],[3.5,51.35],[4.8,51.5],[5.85,51.15],[6.4,50.8],[6.1,50.1],[5.5,49.5],[4.8,50],[4.1,50],[3.3,50.5],[2.9,50.9]]},
+ {id:'france-ww2',from:1941,to:1941,title:'德军占领法国 · 概化范围',occupier:'Germany',sovereign:'France',description:'展示 1941 年法国北部及大西洋沿岸占领区的近似形状。分界线经过概化，未包含全部例外地区及其他战场，不能用作精确军事地图。',source:wiki('德国占领法国时期'),coordinates:[[-4.8,48.5],[-1.9,49.7],[-1.2,49.6],[0.2,49.5],[1.7,50.8],[2.5,51.1],[4.8,50],[6.3,49.4],[7.6,49],[7.5,47.6],[6.8,47.5],[5.5,46.5],[4.8,46.2],[3.5,46.6],[2.5,47.1],[1.1,47],[-0.2,46.2],[-0.7,45],[-1.05,43.5],[-1.8,43.4],[-1.2,46.3],[-2.5,47.4],[-4.8,48.5]]},
+];
+export const chapters=[{year:-10000,title:'农业的黎明',subtitle:'从迁徙走向定居',icon:'sprout'},{year:100,title:'古典世界',subtitle:'帝国、商路与文明',icon:'landmark'},{year:1279,title:'蒙古时代',subtitle:'欧亚大陆的连接',icon:'compass'},{year:1492,title:'大航海时代',subtitle:'世界开始相遇',icon:'ship'},{year:1916,title:'世界大战',subtitle:'战火中的旧大陆',icon:'swords'},{year:1941,title:'占领与抵抗',subtitle:'第二次世界大战',icon:'flag'},{year:2010,title:'当代世界',subtitle:'最新离线疆界快照',icon:'globe'}];

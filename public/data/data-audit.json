@@ -1,0 +1,222 @@
+{
+  "scope": "全量结构、日期与几何检查；不等于逐条史实专家审定",
+  "sourceCounts": {
+    "sourceRecords": 13797,
+    "polityRecords": 12061,
+    "relationRecordsExcludedFromTerritory": 385,
+    "aggregateTerritoriesExcluded": 1348
+  },
+  "issues": [],
+  "legacyFindings": [
+    {
+      "severity": "high",
+      "years": [
+        1279,
+        1300,
+        1400
+      ],
+      "problem": "SUBJECTO=Mongol Empire merges nominal relations into a fictitious unified territory."
+    },
+    {
+      "severity": "high",
+      "years": [
+        1400
+      ],
+      "problem": "Great Khanate polygon still includes Ming China; snapshot was incorrectly reused at 1444."
+    }
+  ],
+  "rejectedReferenceData": [
+    {
+      "source": "g-lanza/InvaderGIS",
+      "reason": "Sample Abbasid geometry has swapped coordinates and its 750–1258 capital is listed as Cairo; not imported."
+    }
+  ],
+  "metadataCoverage": {
+    "entities": 1415,
+    "governmentEntities": 621,
+    "religionEntities": 352,
+    "rulerEntities": 256,
+    "officeMatchedReigns": 52,
+    "flagAssets": 897,
+    "alliances": 6426,
+    "warParticipationPeriods": 356,
+    "portraits": 757
+  },
+  "excludedDiplomacyIntervals": [
+    {
+      "id": "cow-a-199-651-678-1989-1990-1980-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-199-651-680-1989-1990-1980-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-199-678-651-1989-1990-1980-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-199-680-651-1989-1990-1980-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-230-651-678-1989-1990-1980-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-230-651-680-1989-1990-1980-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-230-678-651-1989-1990-1980-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-230-680-651-1989-1990-1980-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-345-350-1954-1964-1965-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-345-350-1954-1954-1957-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-345-350-1954-1954-1964-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-345-640-1954-1954-1956-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-345-640-1954-1954-1957-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-350-345-1954-1964-1966-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-350-345-1954-1954-1960-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-350-345-1954-1954-1965-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-350-640-1954-1964-1965-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-350-640-1954-1954-1961-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-350-640-1954-1954-1964-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-640-345-1954-1964-1967-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-640-345-1954-1954-1962-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-640-345-1954-1954-1966-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-640-350-1954-1964-1967-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-640-350-1954-1954-1963-defense,nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-234-640-350-1954-1954-1966-nonaggression,entente",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-304-438-450-2004-2012-1992-nonaggression",
+      "problem": "Annual row outside original dyad interval"
+    },
+    {
+      "id": "cow-a-304-450-438-2004-2012-1992-nonaggression",
+      "problem": "Annual row outside original dyad interval"
+    }
+  ],
+  "curatedCorrections": [
+    {
+      "name": "Roman Empire",
+      "qid": "Q2277",
+      "change": "Replace Byzantine-empire entity and exclude pre-27 BCE imperial label."
+    },
+    {
+      "name": "Han Dynasty",
+      "qid": "Q7209",
+      "change": "Use whole Han dynasty entity, cut end to 220 CE and exclude Xin interregnum."
+    },
+    {
+      "name": "Livonian Confederation",
+      "qid": "Q1064825",
+      "change": "Replace wrong Livonian-language entity."
+    },
+    {
+      "name": "Kingdom of Great Britain",
+      "change": "Great Britain island Q23666 is not a sovereign-state entity. Year-aware identity Q161885 / Q174193 / Q145 and names are applied at query time.",
+      "source": "https://api.parliament.uk/regnal-years/kingdoms"
+    },
+    {
+      "name": "United Principalities of Moldavia and Wallachia",
+      "change": "From 1881 use Kingdom of Romania Q203493; geometry retains source interval and sourceName.",
+      "source": "https://www.wikidata.org/wiki/Q203493"
+    }
+  ],
+  "knownCoverageGaps": [
+    "Ming Dynasty earliest geometry starts in 1375; founding in 1368 is not a license to invent earlier geometry.",
+    "Source geometry simplification and geopolitical interpretations remain uncertain.",
+    "2025–2026 use 2024 geometry, explicitly shown.",
+    "Royal marriages only include sourced curated examples; not a complete genealogy."
+  ],
+  "presentationReview": {
+    "nameReview": "name-review.json",
+    "portraits": 778,
+    "historicalAdminFeatures": 880,
+    "regimeNamesKeptOutOfMapLabels": true,
+    "reciprocalTreatiesMerged": true,
+    "colonialBoundaryPrecision": "modern-reference geographic reconstruction; not exact historical administrative borders",
+    "retainedSourceRecords": 12059,
+    "countryRegimeCorrections": [
+      "Francoist Spain -> Spain; dictatorship, not a parliamentary constitutional monarchy",
+      "Estado Novo -> Portugal; president and head of government distinguished",
+      "Pahlavi Dynasty -> Iran"
+    ]
+  },
+  "conflictExpansion": {
+    "conflictRecords": 1058,
+    "ucdpConflictYears": 2816,
+    "historicalWarsAdded": 15,
+    "nationalStrengthStateYears": 15171,
+    "nationalStrengthYears": [
+      1816,
+      2012
+    ],
+    "officeMatchedTermsAdded": 784,
+    "newPortraits": 21,
+    "portraitTotal": 778,
+    "controlAreaRecords": 25,
+    "controlAreasActuallyAddedToShards": 23,
+    "retainedDatedUniqueRecords": 12081,
+    "precision": "部分历史疆界、现代州界组合与地理分区推断；不是逐日战线。",
+    "inference": "战争议题概括与短区间兵力插值明确标记；未知胜负不推断，国家兵力不当作本场战争投入。",
+    "translation": "703条缺中文简介提供分类和地理线索整理的中文简述，保留原文；少数专名仍用原文。",
+    "performance": "后台线程查询、边线及标注计算；相同有效记录复用；180ms合并拖动请求，放手立即提交；低倍视角不重建全部地块。"
+  }
+}

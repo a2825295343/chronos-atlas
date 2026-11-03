@@ -29,6 +29,7 @@ export function prepare(data:FeatureCollection):FeatureCollection {
 }
 export default function MapView(props:Props){
  const container=useRef<HTMLDivElement>(null),mapRef=useRef<maplibregl.Map|null>(null),ready=useRef(false),latest=useRef(props),generation=useRef(0),lastData=useRef<FeatureCollection|null>(null),lastTerrain=useRef<string|null>(null),provinceData=useRef(new Map<string,AtlasFeature>()),hdReady=useRef(false),viewFrame=useRef<number|null>(null),terrainScale=useRef(0);
+ const lastSelectionFrame=useRef<{data:FeatureCollection|null;owner:string|null}|null>(null);
  const lastCapitalFrame=useRef<{data:FeatureCollection|null;year:number}|null>(null);
  const regionTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
  const regionWorker=useRef<Worker|null>(null),regionRequest=useRef(0);
@@ -110,9 +111,12 @@ export default function MapView(props:Props){
    (f.properties as any).pattern=id;
   }
   (map.getSource('occupations') as maplibregl.GeoJSONSource).setData(polygonRenderParts({type:'FeatureCollection',features:occupationFeatures}));
-  const selectedParts=p.selected?(p.data?.features||[]).filter(f=>!f.properties?.controlArea&&
-   (f.properties?.SUBJECTO?.trim()||f.properties?.NAME)===p.selected):[];
-  void (map.getSource('selection-borders') as maplibregl.GeoJSONSource).setData(politicalBorders({type:'FeatureCollection',features:selectedParts}));
+  if(lastSelectionFrame.current?.data!==p.data||lastSelectionFrame.current?.owner!==p.selected){
+   const selectedParts=p.selected?(p.data?.features||[]).filter(f=>!f.properties?.controlArea&&
+    (f.properties?.SUBJECTO?.trim()||f.properties?.NAME)===p.selected):[];
+   void (map.getSource('selection-borders') as maplibregl.GeoJSONSource).setData(politicalBorders({type:'FeatureCollection',features:selectedParts}));
+   lastSelectionFrame.current={data:p.data,owner:p.selected};
+  }
   map.setFilter('province-selection',['==',['get','id'],p.regionSelection?.kind==='province'?(p.regionSelection.feature?.properties.id??''):'']);
   for(const id of ['country-label','country-label-viewport','ocean-label','place-label','reference-site-label','capital-label']) map.setLayoutProperty(id,'visibility',p.layers.labels?'visible':'none');
   for(const id of ['province-line','province-label'])map.setLayoutProperty(id,'visibility',p.layers.provinces?'visible':'none');
@@ -333,7 +337,7 @@ export default function MapView(props:Props){
   map.on('mouseleave','capital-star',()=>capitalPopup.remove());
   map.on('mousemove',e=>{if(ready.current)map.getCanvas().style.cursor=map.queryRenderedFeatures(e.point,{layers:['country-fill','capital-star','place-dot','reference-site-dot','occupation-base']}).length?'pointer':'grab';});
   let reported=false;map.on('error',e=>{console.warn('Map resource unavailable',e.error?.message||'');if(!reported){reported=true;latest.current.onError(`部分地图素材加载失败，可刷新重试。${e.error?.message?.includes('WebGL')?' 请检查浏览器 WebGL 支持。':''}`);}});
-  return()=>{if(regionTimer.current)clearTimeout(regionTimer.current);regionWorker.current?.terminate();regionWorker.current=null;generation.current++;if(viewFrame.current!==null)cancelAnimationFrame(viewFrame.current);viewFrame.current=null;ready.current=false;lastData.current=null;lastCapitalFrame.current=null;lastTerrain.current=null;hdReady.current=false;capitalPopup.remove();map.remove();mapRef.current=null;};
+  return()=>{if(regionTimer.current)clearTimeout(regionTimer.current);regionWorker.current?.terminate();regionWorker.current=null;generation.current++;if(viewFrame.current!==null)cancelAnimationFrame(viewFrame.current);viewFrame.current=null;ready.current=false;lastData.current=null;lastCapitalFrame.current=null;lastSelectionFrame.current=null;lastTerrain.current=null;hdReady.current=false;capitalPopup.remove();map.remove();mapRef.current=null;};
  },[]);
  useEffect(()=>{update();},[props.data,props.year,props.layers,props.selected,props.regionSelection]);
  return <div className="map-canvas" ref={container} aria-label="可拖动缩放的历史世界地图"/>;

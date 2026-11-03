@@ -40,3 +40,18 @@ test('shared borders deduplicate even when one outline has intermediate vertices
  right.properties.SUBJECTO='left';
  assert.equal(sharedLength(),0);
 });
+
+test('coincident exterior copies keep one outline and occupation strokes stay separate',()=>{
+ const polygon=coordinates=>({type:'Polygon',coordinates:[coordinates]});
+ const outer=[[0,0],[2,0],[2,2],[0,2],[0,0]];
+ const inner=[[.4,.4],[.8,.4],[.8,.8],[.4,.8],[.4,.4]];
+ const features=[
+  {type:'Feature',properties:{NAME:'A'},geometry:polygon(outer)},
+  {type:'Feature',properties:{NAME:'A'},geometry:polygon([...outer].reverse())},
+  {type:'Feature',properties:{NAME:'B',controlArea:true},geometry:polygon(inner)},
+ ];
+ const lines=politicalBorders({type:'FeatureCollection',features}).features[0].geometry.coordinates;
+ assert.equal(lines.length,1);
+ assert.equal(lines[0].length,5);
+ assert.ok(lines[0].every(([x,y])=>[0,2].includes(x)&&[0,2].includes(y)));
+});

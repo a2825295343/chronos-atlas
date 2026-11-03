@@ -2,6 +2,7 @@
 const SCALE=1e5;
 const key=([x,y])=>x+','+y;
 const quantize=p=>[Math.round(p[0]*SCALE),Math.round(p[1]*SCALE)];
+let geometryEdges=new WeakMap();
 const atDateLine=p=>Math.abs(Math.abs(p[0])-180*SCALE)<=1;
 
 function gcd(a,b){
@@ -25,8 +26,13 @@ function visibleSegments(edges){
  let previous;
  for(const [,event] of [...events].sort(([a],[b])=>a-b)){
   if(previous&&active.size){
-   const owners=new Set([...active].map(e=>e.owner));
-   if(active.size===1||owners.size>1)segments.push([previous,event.point]);
+   const first=active.values().next().value;
+   let sameSide=true,sameOwner=true;
+   for(const edge of active){
+    if(edge.owner!==first.owner)sameOwner=false;
+    if(edge.forward!==first.forward)sameSide=false;
+   }
+   if(!sameOwner||sameSide)segments.push([previous,event.point]);
   }
   for(const edge of event.ends)active.delete(edge);
   for(const edge of event.starts)active.add(edge);
@@ -35,29 +41,46 @@ function visibleSegments(edges){
  return segments;
 }
 
-export function politicalBorders(data){
- const collinear=new Map();
- for(const f of data.features){
-  const owner=f.properties?.SUBJECTO?.trim()||f.properties?.NAME?.trim();
-  if(!owner)continue;
-  const polygons=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.type==='MultiPolygon'?f.geometry.coordinates:[];
-  for(const polygon of polygons)for(const points of polygon){
-   let start=quantize(points[0]);
-   for(const point of points.slice(1)){
-    const end=quantize(point),previous=start;
-    start=end;
-    if(atDateLine(previous)&&atDateLine(end))continue;
-    const dx=end[0]-previous[0],dy=end[1]-previous[1];
-    if(!dx&&!dy)continue;
-    const unit=gcd(Math.abs(dx),Math.abs(dy))*((dx||dy)<0?-1:1);
-    const x=dx/unit,y=dy/unit;
-    const id=[x,y,x*previous[1]-y*previous[0]].join(',');
-    const ordered=unit>0?[previous,end]:[end,previous];
-    if(!collinear.has(id))collinear.set(id,[]);
-    collinear.get(id).push({owner,start:ordered[0],end:ordered[1],vertical:!x});
-   }
+function edgesFor(geometry){
+ let edges=geometryEdges.get(geometry);
+ if(edges)return edges;
+ edges=[];
+ const polygons=geometry.type==='Polygon'?[geometry.coordinates]:geometry.type==='MultiPolygon'?geometry.coordinates:[];
+ for(const polygon of polygons)for(const [ringIndex,points] of polygon.entries()){
+  if(points.length<2)continue;
+  const ring=points.map(quantize);
+  let signedArea=0;
+  for(let i=1;i<ring.length;i++)signedArea+=ring[i-1][0]*ring[i][1]-ring[i][0]*ring[i-1][1];
+  const reverse=(signedArea<0)===(ringIndex===0);
+  for(let i=1;i<ring.length;i++){
+   const previous=ring[i-1],end=ring[i];
+   if(atDateLine(previous)&&atDateLine(end))continue;
+   const dx=end[0]-previous[0],dy=end[1]-previous[1];
+   if(!dx&&!dy)continue;
+   const unit=gcd(Math.abs(dx),Math.abs(dy))*((dx||dy)<0?-1:1);
+   const x=dx/unit,y=dy/unit;
+   const id=[x,y,x*previous[1]-y*previous[0]].join(',');
+   const [start,stop]=unit>0?[previous,end]:[end,previous];
+   edges.push({id,start,end:stop,vertical:!x,forward:(unit>0)!==reverse});
   }
  }
+ return edges;
+}
+
+export function politicalBorders(data){
+ const collinear=new Map(),nextGeometryEdges=new WeakMap();
+ for(const f of data.features){
+  const owner=f.properties?.SUBJECTO?.trim()||f.properties?.NAME?.trim();
+  if(!owner||!f.geometry||f.properties?.controlArea)continue;
+  const edges=edgesFor(f.geometry);
+  nextGeometryEdges.set(f.geometry,edges);
+  for(const edge of edges){
+   if(!collinear.has(edge.id))collinear.set(edge.id,[]);
+   collinear.get(edge.id).push({...edge,owner});
+  }
+ }
+
+ geometryEdges=nextGeometryEdges;
 
  // Connect the visible edges into continuous strokes, preferring the
  // straightest continuation at a junction.

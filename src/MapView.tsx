@@ -334,7 +334,7 @@ export default function MapView(props:Props){
     if(feature){p.onSelect({kind:'country',feature:feature as AtlasFeature,name:owner,position:e.lngLat.toArray()});return;}
    }
    if(p.layers.provinces&&map.getZoom()>4.7){
-    const locator=map.queryRenderedFeatures(e.point,{layers:['province-label'],filter:['any',['==',['get','locatorOnly'],true],['has','locatorLabel']]})[0];
+    const locator=map.queryRenderedFeatures(e.point,{layers:['province-label'],filter:['any',['==',['get','locatorOnly'],true],['has','labelPosition']]})[0];
     const feature=locator&&provinceData.current.get(locator.properties.id);
     if(feature){
      const position=feature.geometry.type==='Point'?feature.geometry.coordinates:feature.properties.labelPosition;

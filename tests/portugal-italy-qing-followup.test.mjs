@@ -109,7 +109,6 @@ test('early PRC snapshots separate the four Sichuan administrations and municipa
  assert.ok(!at(1926,[121.47,31.23]).includes('上海市'));
  const labels=year=>regionsAtYear(modern,historical,undefined,year).features.filter(f=>f.properties.locatorOnly).map(f=>f.properties.label);
  assert.ok(labels(1900).includes('上海县'));
- assert.ok(labels(1927).includes('上海特别市'));
 });
 
 test('Tianjin concession tiles have explicit priority across zoom levels', () => {
@@ -161,6 +160,25 @@ test('Shanghai county and city labels select their dated polygon rather than the
   assert.ok(pointInGeometry(feature.properties.labelPosition,feature.geometry));
   assert.ok(!feature.properties.locatorOnly);
   assert.notEqual(feature.properties.id,'CHN-1819');
+ }
+});
+
+test('Shanghai has a selectable city footprint throughout 1927–1944 and separates concessions until 1943', () => {
+ const historical=read('historical-provinces.geojson');
+ const shanghai={...historical,features:historical.features.filter(f=>f.properties.supplement==='shanghai-historical-outlines')};
+ for(let year=1927;year<=1944;year++){
+  const {features}=regionsAtYear(undefined,shanghai,undefined,year);
+  const city=features.find(f=>f.properties.locatorLabel==='市址');
+  assert.ok(city, String(year));
+  assert.ok(pointInGeometry(city.properties.labelPosition,city.geometry),String(year));
+  assert.equal(city.properties.label,year<1930?'上海特别市':year<1937?'上海市':year===1937?'上海市（战时）':'上海特别市（占领时期）');
+  const concessions=features.filter(f=>f.properties.type==='租界');
+  assert.equal(concessions.length,year<=1942?2:0);
+  for(const f of concessions){
+   assert.ok(pointInGeometry(f.properties.labelPosition,f.geometry));
+   assert.ok(!pointInGeometry(f.properties.labelPosition,city.geometry));
+  }
+  if(year===1944)assert.equal(city.geometry.type,'MultiPolygon');
  }
 });
 

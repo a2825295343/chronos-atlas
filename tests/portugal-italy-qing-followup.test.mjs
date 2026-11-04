@@ -65,7 +65,7 @@ test('the calibrated historical footprints replace seats and cut only overlappin
  const historical = onlyChina(read('historical-provinces.geojson'));
  const at = year => regionsAtYear(modern,historical,undefined,year).features;
  const snapshots = year => at(year).filter(f => f.properties.supplement === 'chinese-province-snapshots');
- for (const [year,count] of [[1949,0],[1950,15],[1951,15],[1952,13],[1953,13],[1954,2],[1955,0]]) {
+ for (const [year,count] of [[1949,0],[1950,27],[1951,27],[1952,22],[1953,20],[1954,3],[1955,0]]) {
   assert.equal(snapshots(year).length,count);
  }
  const features = at(1951);
@@ -86,6 +86,30 @@ test('the calibrated historical footprints replace seats and cut only overlappin
  const shandong = features.filter(f => pointInGeometry([117.0,36.65],f.geometry));
  assert.deepEqual(shandong.map(f=>f.properties.label),['山东省']);
  assert.ok(shandong.every(f=>f.properties.sourceYear===1950));
+});
+
+test('early PRC snapshots separate the four Sichuan administrations and municipal enclaves', () => {
+ const china=collection=>({...collection,features:collection.features.filter(f=>f.properties.country==='China')});
+ const modern=china(read('provinces.geojson')),historical=china(read('historical-provinces.geojson'));
+ const frames=new Map();
+ const at=(year,point)=>{
+  if(!frames.has(year))frames.set(year,regionsAtYear(modern,historical,undefined,year).features);
+  return frames.get(year).filter(f=>pointInGeometry(point,f.geometry)).map(f=>f.properties.label);
+ };
+ for(const [point,name] of [
+  [[102.71,25.05],'云南省'],[[104.06,30.67],'川西行署区'],[[106.11,30.80],'川北行署区'],
+  [[105.44,28.88],'川南行署区'],[[108.39,30.81],'川东行署区'],[[106.55,29.56],'重庆市'],
+  [[116.40,39.91],'北京市'],[[117.20,39.13],'天津市'],[[121.47,31.23],'上海市'],
+  [[119.02,33.60],'苏北行署区'],[[120.62,31.30],'苏南行署区'],
+ ])assert.deepEqual(at(1951,point),[name]);
+ assert.deepEqual(at(1952,[104.06,30.67]),['四川省']);
+ assert.deepEqual(at(1953,[120.62,31.30]),['江苏省']);
+ assert.deepEqual(at(1954,[106.55,29.56]),['四川省']);
+ assert.deepEqual(at(1980,[106.55,29.56]),['四川省']);
+ assert.ok(!at(1926,[121.47,31.23]).includes('上海市'));
+ const labels=year=>regionsAtYear(modern,historical,undefined,year).features.filter(f=>f.properties.locatorOnly).map(f=>f.properties.label);
+ assert.ok(labels(1926).includes('上海县'));
+ assert.ok(labels(1927).includes('上海特别市'));
 });
 
 test('Tianjin concession tiles have explicit priority across zoom levels', () => {

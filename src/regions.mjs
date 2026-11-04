@@ -67,18 +67,26 @@ export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
  }
  const snapshots=active.filter(f=>f.properties.supplement==='chinese-province-snapshots');
  const snapshotKeys=new Set(snapshots.map(f=>f.properties.provinceKey));
- const locatorKey=f=>f.properties.id.split(':')[1].replace('-yaan','');
+ const locatorKey=f=>f.properties.provinceKey||f.properties.id.split(':')[1].replace('-yaan','');
  const locators=active.filter(f=>f.properties.locatorOnly&&!snapshotKeys.has(locatorKey(f)));
  const withheldCells=new Set([...locators.map(locatorKey),...snapshotKeys]
   .flatMap(key=>formerProvinceCells[key]||[]));
  const historicalFeatures=[...active.filter(f=>!f.properties.locatorOnly&&!snapshots.includes(f)),...snapshots,...locators];
  const replaced=new Set(active.filter(f=>f.properties.replaceCountry||(!f.properties.replaces&&f.properties.country==='Italy')).map(f=>f.properties.country));
  const replacedIds=new Set(active.flatMap(f=>f.properties.replaces||[]));
- const features=modern.features.filter(f=>!replaced.has(f.properties.country)&&!replacedIds.has(f.properties.id)
+ const chongqing=year>=1955&&year<1997?modern.features.find(f=>f.properties.id==='CHN-1154'):null;
+ const modernCells=chongqing?modern.features.filter(f=>f!==chongqing).map(f=>{
+  if(f.properties.id!=='CHN-1809')return f;
+  const coordinates=polygonClipping.union(f.geometry.coordinates,chongqing.geometry.coordinates);
+  return {...f,geometry:{type:'MultiPolygon',coordinates},properties:{...f.properties,
+   sourceUrl:'https://cq.gov.cn/zjcq/sqgk/cqsq/202412/t20241231_14378256.html',
+   accuracy:'重庆于1954年改为四川省辖市，1997年恢复直辖。此处合并现代底图作范围参考。'}};
+ }):modern.features;
+ const features=modernCells.filter(f=>!replaced.has(f.properties.country)&&!replacedIds.has(f.properties.id)
   &&!(f.properties.id==='CHN-1813'&&year>=1949&&year<=1953)).map(f=>{
   const candidate=rules.find(r=>r.id===f.properties.id&&r.from<=year&&year<=r.to);
   const modernYear=cellModernFrom[f.properties.id]??modernReferenceFrom[f.properties.country]??1950;
-  const reference=()=>({...f,properties:{...f.properties,dataKind:'modern-reference',modernLabel:f.properties.label,suppressLabel:year<modernYear,boundaryVisible:year>=modernYear,accuracy:year<modernYear?'该年历史名称与行政界未核定；此地块仅作可点击的空间定位参考，现代行政名不显示在古代地图上。':'现代分区定位参考；不能据此推断该年边界与现状完全相同。'}});
+  const reference=()=>({...f,properties:{...f.properties,dataKind:'modern-reference',modernLabel:f.properties.label,suppressLabel:year<modernYear,boundaryVisible:year>=modernYear,accuracy:f.properties.accuracy||(year<modernYear?'该年历史名称与行政界未核定；此地块仅作可点击的空间定位参考，现代行政名不显示在古代地图上。':'现代分区定位参考；不能据此推断该年边界与现状完全相同。')}});
   if(withheldCells.has(f.properties.id))return {...f,properties:{...f.properties,dataKind:'modern-reference',
    suppressLabel:true,boundaryVisible:false,accuracy:'此处仅可定位。此参考地块的省界尚未完全核实。'}};
   if(!candidate){

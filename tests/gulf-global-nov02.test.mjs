@@ -82,8 +82,8 @@ test('reviewed wars link to countries in active years and preserve pauses',()=>{
 test('province names and merged locating areas change across reforms',()=>{
  const modern=read('provinces.geojson'),historical=read('historical-provinces.geojson');
  const frame=y=>regionsAtYear(modern,historical,world(y),y).features;
- const at=(y,xy)=>frame(y).filter(f=>pointInGeometry(xy,f.geometry)&&f.properties.supplement==='dated-regions-2026-11-02');
- assert.ok(at(1444,[127.5,36.7]).some(f=>f.properties.label==='忠清道'));
+ const at=(y,xy)=>frame(y).filter(f=>pointInGeometry(xy,f.geometry));
+ assert.deepEqual(at(1444,[127.5,36.7]).map(f=>f.properties.label),['忠清道']);
  assert.ok(at(1900,[127.5,36.7]).some(f=>f.properties.label==='忠清北道'));
  assert.ok(!at(1900,[127.5,36.7]).some(f=>f.properties.label==='忠清道'));
  assert.ok(at(1895,[127.5,36.7]).some(f=>/旧域/.test(f.properties.label)));

@@ -51,7 +51,7 @@ test('historic names cannot extend across the wrong owner, and unverified modern
  const a=modern.features.find(f=>f.properties.country==='China'&&f.properties.native==='Zhejiang');
  const wrongWorld={type:'FeatureCollection',features:[{...a,properties:{NAME:'Other power'}}]};
  const result=regionsAtYear({type:'FeatureCollection',features:[a]},historical,wrongWorld,750);
- assert.ok(!result.features.some(f=>f.properties.label==='江南东道'));assert.equal(result.features[0].properties.suppressLabel,true);assert.equal(result.features[0].properties.boundaryVisible,false);
+ assert.ok(!result.features.some(f=>f.properties.label==='江南东道'||f.properties.id===a.properties.id));
  const sample=modern.features.filter(f=>['Brazil','United States of America','Australia'].includes(f.properties.country));const ancient=regionsAtYear({type:'FeatureCollection',features:sample},{type:'FeatureCollection',features:[]},{type:'FeatureCollection',features:[]},100);
- assert.ok(ancient.features.every(f=>f.properties.suppressLabel&&f.properties.boundaryVisible===false));
+ assert.equal(ancient.features.length,0);
 });

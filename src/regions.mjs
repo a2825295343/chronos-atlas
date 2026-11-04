@@ -71,22 +71,11 @@ export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
  const locators=active.filter(f=>f.properties.locatorOnly&&!snapshotKeys.has(locatorKey(f)));
  const withheldCells=new Set([...locators.map(locatorKey),...snapshotKeys]
   .flatMap(key=>formerProvinceCells[key]||[]));
- const masks=snapshots.map(f=>({bounds:bounds(f.geometry),geometry:f.geometry.coordinates}));
- function clipProvinceReference(f){
-  if(f.properties.country!=='China'||!masks.length)return f;
-  const b=bounds(f.geometry),overlapping=masks.filter(m=>intersects(b,m.bounds));
-  if(!overlapping.length)return f;
-  try{
-   const coordinates=polygonClipping.difference(f.geometry.coordinates,...overlapping.map(m=>m.geometry));
-   return coordinates.length?{...f,geometry:{type:'MultiPolygon',coordinates}}:null;
-  }catch{return null;}
- }
- const historicalFeatures=[...active.filter(f=>!f.properties.locatorOnly&&!snapshots.includes(f))
-  .map(clipProvinceReference).filter(Boolean),...snapshots,...locators];
+ const historicalFeatures=[...active.filter(f=>!f.properties.locatorOnly&&!snapshots.includes(f)),...snapshots,...locators];
  const replaced=new Set(active.filter(f=>f.properties.replaceCountry||(!f.properties.replaces&&f.properties.country==='Italy')).map(f=>f.properties.country));
  const replacedIds=new Set(active.flatMap(f=>f.properties.replaces||[]));
  const features=modern.features.filter(f=>!replaced.has(f.properties.country)&&!replacedIds.has(f.properties.id)
-  &&!(f.properties.id==='CHN-1813'&&year>=1949&&year<=1953)).map(clipProvinceReference).filter(Boolean).map(f=>{
+  &&!(f.properties.id==='CHN-1813'&&year>=1949&&year<=1953)).map(f=>{
   const candidate=rules.find(r=>r.id===f.properties.id&&r.from<=year&&year<=r.to);
   const modernYear=cellModernFrom[f.properties.id]??modernReferenceFrom[f.properties.country]??1950;
   const reference=()=>({...f,properties:{...f.properties,dataKind:'modern-reference',modernLabel:f.properties.label,suppressLabel:year<modernYear,boundaryVisible:year>=modernYear,accuracy:year<modernYear?'该年历史名称与行政界未核定；此地块仅作可点击的空间定位参考，现代行政名不显示在古代地图上。':'现代分区定位参考；不能据此推断该年边界与现状完全相同。'}});
@@ -104,5 +93,51 @@ export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
   if(candidate.owners&&!candidate.owners.includes(owner))return reference();
   return {...f,properties:{...f.properties,label:candidate.label,modernLabel:f.properties.label,historicalName:true,boundaryVisible:true,validFrom:candidate.from,validTo:candidate.to,sourceUrl:sourceFor(candidate.id),dataKind:'historical-name-reference-boundary',accuracy:'名称按年代与实际控制势力筛选；轮廓仍为现代定位参考'}};
  });
- return {type:'FeatureCollection',features:[...features,...historicalFeatures]};
+ return {type:'FeatureCollection',features:partitionRegions([...features,...historicalFeatures],bounds)};
+}
+
+/** One selectable footprint per location. Prefer dated boundaries over references. */
+function partitionRegions(features,bounds){
+ const rank=p=>p.dataKind==='historical-snapshot'?0:p.dataKind==='historical-reconstruction'?1:p.priority==='fallback'?3:p.dataKind==='modern-reference'?4:2;
+ const accepted=[];
+ const grid=new Map();
+ const keys=([w,s,e,n])=>{
+  const result=[];
+  for(let x=Math.floor(w/10);x<=Math.floor(e/10);x++)
+   for(let y=Math.floor(s/10);y<=Math.floor(n/10);y++)result.push(x+','+y);
+  return result;
+ };
+ for(const f of features.filter(f=>!f.properties.suppressLabel).sort((a,b)=>rank(a.properties)-rank(b.properties))){
+  if(f.geometry.type==='Point'){accepted.push(f);continue;}
+  const modern=f.properties.dataKind==='modern-reference';
+  const snapshot=f.properties.supplement==='chinese-province-snapshots'?f.properties.sourceYear:null;
+  // The Chinese source is already partitioned with GEOS during import.
+  // Re-clipping its shared edges can introduce floating-point topology errors.
+  const polygons=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.coordinates;
+  let changed=false;
+  const coordinates=polygons.flatMap(polygon=>{
+   const box=bounds({type:'Polygon',coordinates:polygon});
+   const candidates=new Set(keys(box).flatMap(cell=>grid.get(cell)||[]));
+   const cuts=[...candidates].filter(({box:b,sourceYear})=>(snapshot===null||snapshot!==sourceYear)
+    &&box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1]);
+   if(!cuts.length)return [polygon];
+   changed=true;
+   try{return polygonClipping.difference(polygon,...cuts.map(r=>r.polygon));}
+   catch{return [];}
+  });
+  if(!coordinates.length)continue;
+  const region=changed?{...f,geometry:{type:'MultiPolygon',coordinates}}:f;
+  accepted.push(region);
+  // The modern reference dataset is a single base layer. Index overlays,
+  // not its thousands of mutually adjacent administrative cells.
+  if(modern)continue;
+  for(const polygon of coordinates){
+   const entry={box:bounds({type:'Polygon',coordinates:polygon}),polygon,sourceYear:snapshot};
+   for(const cell of keys(entry.box)){
+    if(!grid.has(cell))grid.set(cell,[]);
+    grid.get(cell).push(entry);
+   }
+  }
+ }
+ return accepted;
 }

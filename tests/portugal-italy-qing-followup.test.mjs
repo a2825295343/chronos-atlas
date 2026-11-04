@@ -65,7 +65,7 @@ test('the calibrated historical footprints replace seats and cut only overlappin
  const historical = onlyChina(read('historical-provinces.geojson'));
  const at = year => regionsAtYear(modern,historical,undefined,year).features;
  const snapshots = year => at(year).filter(f => f.properties.supplement === 'chinese-province-snapshots');
- for (const [year,count] of [[1949,0],[1950,8],[1951,8],[1952,6],[1953,6],[1954,2],[1955,0]]) {
+ for (const [year,count] of [[1949,0],[1950,15],[1951,15],[1952,13],[1953,13],[1954,2],[1955,0]]) {
   assert.equal(snapshots(year).length,count);
  }
  const features = at(1951);
@@ -83,6 +83,9 @@ test('the calibrated historical footprints replace seats and cut only overlappin
   assert.deepEqual(hits.map(f => f.properties.label),[label]);
  }
  assert.ok(!features.some(f => f.properties.id === 'CHN-1813'));
+ const shandong = features.filter(f => pointInGeometry([117.0,36.65],f.geometry));
+ assert.deepEqual(shandong.map(f=>f.properties.label),['山东省']);
+ assert.ok(shandong.every(f=>f.properties.sourceYear===1950));
 });
 
 test('Tianjin concession tiles have explicit priority across zoom levels', () => {
@@ -100,6 +103,20 @@ test('Tianjin concession tiles have explicit priority across zoom levels', () =>
    assert.equal(hit?.tags.NAME,name,`${zoom}: ${name}`);
    assert.equal(hit.tags.fillOrder,1);
   }
+ }
+});
+
+test('overlapping historical provinces share a single selectable footprint, with the snapshot taking priority', () => {
+ const province = (id, west, east, dataKind) => ({
+  type:'Feature',
+  geometry:{type:'Polygon',coordinates:[[[west,0],[east,0],[east,2],[west,2],[west,0]]]},
+  properties:{id,label:id,country:id,validFrom:1900,validTo:1910,dataKind},
+ });
+ const reference=province('reference',0,3,'historical-reconstruction');
+ const snapshot=province('snapshot',2,4,'historical-snapshot');
+ const {features}=regionsAtYear(undefined,{type:'FeatureCollection',features:[reference,snapshot]},undefined,1905);
+ for(const [point,id] of [[[1,1],'reference'],[[2.5,1],'snapshot'],[[3.5,1],'snapshot']]){
+  assert.deepEqual(features.filter(f=>pointInGeometry(point,f.geometry)).map(f=>f.properties.id),[id]);
  }
 });
 

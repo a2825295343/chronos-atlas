@@ -21,7 +21,7 @@ export type AtlasFeature=Feature<Geometry,Record<string,any>>;
 export type Selection={kind:'country'|'province'|'place'|'occupation'|'site';feature?:AtlasFeature;id?:string;name:string;position?:[number,number]};
 export type Layers={terrain:boolean;labels:boolean;events:boolean;provinces:boolean;occupation:boolean;autoView:boolean};
 export type MapHandle={fly:(position:[number,number],zoom?:number)=>void;flyToPolity:(name:string)=>void;zoom:(delta:number)=>void;reset:()=>void;tilt:()=>void;globe:()=>void;screenshot:()=>void};
-type Props={regionSelection?:Selection|null;data:FeatureCollection|null;year:number;layers:Layers;selected:string|null;onSelect:(s:Selection)=>void;onZoom:(z:number)=>void;onReady:(h:MapHandle)=>void;onError:(message:string)=>void};
+type Props={regionSelection?:Selection|null;data:FeatureCollection|null;year:number;layers:Layers;selected:string|null;onSelect:(s:Selection|null)=>void;onZoom:(z:number)=>void;onReady:(h:MapHandle)=>void;onError:(message:string)=>void};
 const empty:FeatureCollection={type:'FeatureCollection',features:[]};
 maplibregl.setWorkerUrl(workerUrl);
 export function prepare(data:FeatureCollection):FeatureCollection {
@@ -74,7 +74,7 @@ export default function MapView(props:Props){
   provinceData.current=new Map(collection.features.map(f=>[f.properties?.id,f as AtlasFeature]));
   void (map.getSource('provinces') as maplibregl.GeoJSONSource).setData({...collection,features:collection.features.filter(f=>!f.properties?.locatorOnly)});
   void (map.getSource('province-labels') as maplibregl.GeoJSONSource).setData({type:'FeatureCollection',features:collection.features.map(f=>({type:'Feature',properties:f.properties,geometry:{type:'Point',coordinates:f.geometry.type==='Point'?f.geometry.coordinates:featureCenter(f.geometry)}}))});
-  if(p.regionSelection?.position){const point=p.regionSelection.position,feature=collection.features.find(f=>pointInGeometry(point,f.geometry));if(feature)p.onSelect({kind:'province',feature:feature as AtlasFeature,name:feature.properties?.suppressLabel?'历史地名待核定':feature.properties?.label,position:point});}
+  if(p.regionSelection?.position){const point=p.regionSelection.position,feature=collection.features.find(f=>pointInGeometry(point,f.geometry));p.onSelect(feature?{kind:'province',feature:feature as AtlasFeature,name:feature.properties?.label,position:point}:null);}
  }
  function update(){
   const map=mapRef.current,p=latest.current;if(!map||!ready.current)return;
@@ -324,7 +324,7 @@ export default function MapView(props:Props){
    }
    const place=check('place-dot');if(place){p.onSelect({kind:'place',id:place.properties.id,name:place.properties.name,position:e.lngLat.toArray()});return;}
    const province=p.layers.provinces?check('province-hit'):null;
-   if(province&&map.getZoom()>4.7){map.setFilter('province-selection',['==',['get','id'],province.properties.id]);p.onSelect({kind:'province',feature:provinceData.current.get(province.properties.id)||province as AtlasFeature,name:province.properties.suppressLabel?'历史地名待核定':province.properties.label,position:e.lngLat.toArray()});return;}
+   if(province&&map.getZoom()>4.7){map.setFilter('province-selection',['==',['get','id'],province.properties.id]);p.onSelect({kind:'province',feature:provinceData.current.get(province.properties.id)||province as AtlasFeature,name:province.properties.label,position:e.lngLat.toArray()});return;}
    selectCountryAt(e);
   });
   const capitalPopup=new maplibregl.Popup({closeButton:false,closeOnClick:false,offset:10,className:'capital-tooltip'});

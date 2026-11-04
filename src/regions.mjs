@@ -27,6 +27,7 @@ const formerProvinceCells={
  rehe:['CHN-1838','CHN-1813','CHN-1811'],
  xikang:['CHN-1662','CHN-1810','CHN-1809'],
 };
+const northeastModernCells=new Set(['CHN-1813','CHN-1828','CHN-1839']);
 const sourceFor=id=>id.startsWith('RUS-')?'https://www.britannica.com/place/St-Petersburg-Russia':id.startsWith('KOR-')?'https://english.seoul.go.kr/seoul-of-the-past/':'https://www.britannica.com/place/Istanbul';
 /** Actual historical geometries replace reference cells where data is available. */
 export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
@@ -66,7 +67,8 @@ export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
   active.push({...f,geometry:{type:'MultiPolygon',coordinates},properties:{...p,clippedToOwner:true,...(failures?{clipFailures:failures}:{} )}});
  }
  const snapshots=active.filter(f=>f.properties.supplement==='chinese-province-snapshots');
- const snapshotKeys=new Set(snapshots.map(f=>f.properties.provinceKey));
+ const snapshotKeys=new Set(active.filter(f=>!f.properties.locatorOnly&&f.properties.provinceKey)
+  .map(f=>f.properties.provinceKey));
  const locatorKey=f=>f.properties.provinceKey||f.properties.id.split(':')[1].replace('-yaan','');
  const locators=active.filter(f=>f.properties.locatorOnly&&!snapshotKeys.has(locatorKey(f)));
  const withheldCells=new Set([...locators.map(locatorKey),...snapshotKeys]
@@ -83,6 +85,7 @@ export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
    accuracy:'重庆于1954年改为四川省辖市，1997年恢复直辖。此处合并现代底图作范围参考。'}};
  }):modern.features;
  const features=modernCells.filter(f=>!replaced.has(f.properties.country)&&!replacedIds.has(f.properties.id)
+  &&!(northeastModernCells.has(f.properties.id)&&year>=1931&&year<=1949)
   &&!(f.properties.id==='CHN-1813'&&year>=1949&&year<=1953)).map(f=>{
   const candidate=rules.find(r=>r.id===f.properties.id&&r.from<=year&&year<=r.to);
   const modernYear=cellModernFrom[f.properties.id]??modernReferenceFrom[f.properties.country]??1950;

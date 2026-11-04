@@ -74,7 +74,13 @@ export default function MapView(props:Props){
   provinceData.current=new Map(collection.features.map(f=>[f.properties?.id,f as AtlasFeature]));
   void (map.getSource('provinces') as maplibregl.GeoJSONSource).setData({...collection,features:collection.features.filter(f=>!f.properties?.locatorOnly)});
   void (map.getSource('province-labels') as maplibregl.GeoJSONSource).setData({type:'FeatureCollection',features:collection.features.map(f=>({type:'Feature',properties:f.properties,geometry:{type:'Point',coordinates:f.geometry.type==='Point'?f.geometry.coordinates:featureCenter(f.geometry)}}))});
-  if(p.regionSelection?.position){const point=p.regionSelection.position,feature=collection.features.find(f=>pointInGeometry(point,f.geometry));p.onSelect(feature?{kind:'province',feature:feature as AtlasFeature,name:feature.properties?.label,position:point}:null);}
+  if(p.regionSelection?.position){
+   const point=p.regionSelection.position;
+   const locator=p.regionSelection.feature?.properties.locatorOnly
+    ?collection.features.find(f=>f.properties?.locatorOnly&&f.geometry.type==='Point'&&f.geometry.coordinates.every((value,i)=>value===point[i])):undefined;
+   const feature=locator||collection.features.find(f=>pointInGeometry(point,f.geometry));
+   p.onSelect(feature?{kind:'province',feature:feature as AtlasFeature,name:feature.properties?.label,position:point}:null);
+  }
  }
  function update(){
   const map=mapRef.current,p=latest.current;if(!map||!ready.current)return;
@@ -321,6 +327,14 @@ export default function MapView(props:Props){
     const owner=capital.properties.owner;
     const feature=p.data?.features.find(f=>!f.properties?.controlArea&&(f.properties?.SUBJECTO?.trim()||f.properties?.NAME)===owner);
     if(feature){p.onSelect({kind:'country',feature:feature as AtlasFeature,name:owner,position:e.lngLat.toArray()});return;}
+   }
+   if(p.layers.provinces&&map.getZoom()>4.7){
+    const locator=map.queryRenderedFeatures(e.point,{layers:['province-label'],filter:['==',['get','locatorOnly'],true]})[0];
+    const feature=locator&&provinceData.current.get(locator.properties.id);
+    if(feature?.geometry.type==='Point'){
+     p.onSelect({kind:'province',feature,name:feature.properties.label,position:feature.geometry.coordinates as [number,number]});
+     return;
+    }
    }
    const place=check('place-dot');if(place){p.onSelect({kind:'place',id:place.properties.id,name:place.properties.name,position:e.lngLat.toArray()});return;}
    const province=p.layers.provinces?check('province-hit'):null;

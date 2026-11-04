@@ -130,6 +130,25 @@ test('Tianjin concession tiles have explicit priority across zoom levels', () =>
  }
 });
 
+test('late Qing and Republic-era source divisions are selectable without projecting modern Manchuria', () => {
+ const china=collection=>({...collection,features:collection.features.filter(f=>f.properties.country==='China')});
+ const modern=china(read('provinces.geojson')),historical=china(read('historical-provinces.geojson'));
+ for(const [year,checks] of [
+  [1911,[[[123.43,41.8],'奉天省'],[[123.95,47.34],'黑龙江省'],[[126.55,43.83],'吉林省'],[[104.06,30.67],'四川省'],[[116.08,43.94],'内蒙古诸盟']]],
+  [1936,[[[104.06,30.67],'四川省'],[[111.67,40.82],'绥远省'],[[114.88,40.82],'察哈尔省']]],
+  [1946,[[[104.06,30.67],'四川省'],[[111.67,40.82],'绥远省']]],
+ ]){
+  const features=regionsAtYear(modern,historical,undefined,year).features;
+  for(const [point,label] of checks)assert.deepEqual(features.filter(f=>pointInGeometry(point,f.geometry)).map(f=>f.properties.label),[label]);
+  const shanghai=features.find(f=>f.properties.label==='上海县');
+  if(year===1911)assert.ok(shanghai?.properties.locatorOnly&&shanghai.geometry.type==='Point'&&shanghai.properties.sourceUrl);
+  if(year===1936){
+   assert.ok(features.some(f=>f.properties.label==='滨江省'&&f.properties.locatorOnly));
+   assert.ok(!features.some(f=>['CHN-1813','CHN-1828','CHN-1839'].includes(f.properties.id)));
+  }
+ }
+});
+
 test('overlapping historical provinces share a single selectable footprint, with the snapshot taking priority', () => {
  const province = (id, west, east, dataKind) => ({
   type:'Feature',

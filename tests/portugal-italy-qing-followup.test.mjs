@@ -108,7 +108,7 @@ test('early PRC snapshots separate the four Sichuan administrations and municipa
  assert.deepEqual(at(1980,[106.55,29.56]),['四川省']);
  assert.ok(!at(1926,[121.47,31.23]).includes('上海市'));
  const labels=year=>regionsAtYear(modern,historical,undefined,year).features.filter(f=>f.properties.locatorOnly).map(f=>f.properties.label);
- assert.ok(labels(1926).includes('上海县'));
+ assert.ok(labels(1900).includes('上海县'));
  assert.ok(labels(1927).includes('上海特别市'));
 });
 
@@ -141,11 +141,26 @@ test('late Qing and Republic-era source divisions are selectable without project
   const features=regionsAtYear(modern,historical,undefined,year).features;
   for(const [point,label] of checks)assert.deepEqual(features.filter(f=>pointInGeometry(point,f.geometry)).map(f=>f.properties.label),[label]);
   const shanghai=features.find(f=>f.properties.label==='上海县');
-  if(year===1911)assert.ok(shanghai?.properties.locatorOnly&&shanghai.geometry.type==='Point'&&shanghai.properties.sourceUrl);
+  if(year===1911)assert.ok(shanghai?.geometry.type==='Polygon'&&shanghai.properties.sourceUrl);
   if(year===1936){
    assert.ok(features.some(f=>f.properties.label==='滨江省'&&f.properties.locatorOnly));
    assert.ok(!features.some(f=>['CHN-1813','CHN-1828','CHN-1839'].includes(f.properties.id)));
   }
+ }
+});
+
+test('Shanghai county and city labels select their dated polygon rather than the point or modern boundary', () => {
+ const onlyChina = collection => ({...collection,features:collection.features.filter(f=>f.properties.country==='China')});
+ const modern=onlyChina(read('provinces.geojson')), historical=onlyChina(read('historical-provinces.geojson'));
+ for(const [year,name,locator] of [[1915,'上海县','县治'],[1946,'上海市','市址'],[1955,'上海市','市址']]){
+  const {features}=regionsAtYear(modern,historical,undefined,year);
+  const result=features.filter(f=>f.properties.label===name);
+  assert.equal(result.length,1);
+  const feature=result[0];
+  assert.equal(feature.properties.locatorLabel,locator);
+  assert.ok(pointInGeometry(feature.properties.labelPosition,feature.geometry));
+  assert.ok(!feature.properties.locatorOnly);
+  assert.notEqual(feature.properties.id,'CHN-1819');
  }
 });
 

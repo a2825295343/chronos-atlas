@@ -65,17 +65,33 @@ export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
   if(pieces.length>1)try{coordinates=polygonClipping.union(pieces);}catch{/* Keep valid clipped pieces, never restore the unsliced reference. */}
   active.push({...f,geometry:{type:'MultiPolygon',coordinates},properties:{...p,clippedToOwner:true,...(failures?{clipFailures:failures}:{} )}});
  }
- const withheldCells=new Set(active.filter(f=>f.properties.locatorOnly)
-  .flatMap(f=>formerProvinceCells[f.properties.id.split(':')[1].replace('-yaan','')]||[]));
+ const snapshots=active.filter(f=>f.properties.supplement==='chinese-province-snapshots');
+ const snapshotKeys=new Set(snapshots.map(f=>f.properties.provinceKey));
+ const locatorKey=f=>f.properties.id.split(':')[1].replace('-yaan','');
+ const locators=active.filter(f=>f.properties.locatorOnly&&!snapshotKeys.has(locatorKey(f)));
+ const withheldCells=new Set([...locators.map(locatorKey),...snapshotKeys]
+  .flatMap(key=>formerProvinceCells[key]||[]));
+ const masks=snapshots.map(f=>({bounds:bounds(f.geometry),geometry:f.geometry.coordinates}));
+ function clipProvinceReference(f){
+  if(f.properties.country!=='China'||!masks.length)return f;
+  const b=bounds(f.geometry),overlapping=masks.filter(m=>intersects(b,m.bounds));
+  if(!overlapping.length)return f;
+  try{
+   const coordinates=polygonClipping.difference(f.geometry.coordinates,...overlapping.map(m=>m.geometry));
+   return coordinates.length?{...f,geometry:{type:'MultiPolygon',coordinates}}:null;
+  }catch{return null;}
+ }
+ const historicalFeatures=[...active.filter(f=>!f.properties.locatorOnly&&!snapshots.includes(f))
+  .map(clipProvinceReference).filter(Boolean),...snapshots,...locators];
  const replaced=new Set(active.filter(f=>f.properties.replaceCountry||(!f.properties.replaces&&f.properties.country==='Italy')).map(f=>f.properties.country));
  const replacedIds=new Set(active.flatMap(f=>f.properties.replaces||[]));
  const features=modern.features.filter(f=>!replaced.has(f.properties.country)&&!replacedIds.has(f.properties.id)
-  &&!(f.properties.id==='CHN-1813'&&year>=1949&&year<=1953)).map(f=>{
+  &&!(f.properties.id==='CHN-1813'&&year>=1949&&year<=1953)).map(clipProvinceReference).filter(Boolean).map(f=>{
   const candidate=rules.find(r=>r.id===f.properties.id&&r.from<=year&&year<=r.to);
   const modernYear=cellModernFrom[f.properties.id]??modernReferenceFrom[f.properties.country]??1950;
   const reference=()=>({...f,properties:{...f.properties,dataKind:'modern-reference',modernLabel:f.properties.label,suppressLabel:year<modernYear,boundaryVisible:year>=modernYear,accuracy:year<modernYear?'该年历史名称与行政界未核定；此地块仅作可点击的空间定位参考，现代行政名不显示在古代地图上。':'现代分区定位参考；不能据此推断该年边界与现状完全相同。'}});
   if(withheldCells.has(f.properties.id))return {...f,properties:{...f.properties,dataKind:'modern-reference',
-   suppressLabel:true,boundaryVisible:false,accuracy:'此处仅可定位。该年的省界待用同期地图配准。'}};
+   suppressLabel:true,boundaryVisible:false,accuracy:'此处仅可定位。此参考地块的省界尚未完全核实。'}};
   if(!candidate){
    const established=establishedNames[f.properties.id];
    const dated=established?.periods?.find(r=>r.from<=year&&year<=r.to);
@@ -88,5 +104,5 @@ export function regionsAtYear(modern=empty,historical=empty,world=empty,year){
   if(candidate.owners&&!candidate.owners.includes(owner))return reference();
   return {...f,properties:{...f.properties,label:candidate.label,modernLabel:f.properties.label,historicalName:true,boundaryVisible:true,validFrom:candidate.from,validTo:candidate.to,sourceUrl:sourceFor(candidate.id),dataKind:'historical-name-reference-boundary',accuracy:'名称按年代与实际控制势力筛选；轮廓仍为现代定位参考'}};
  });
- return {type:'FeatureCollection',features:[...features,...active]};
+ return {type:'FeatureCollection',features:[...features,...historicalFeatures]};
 }

@@ -123,9 +123,14 @@ export default function MapView(props:Props){
    void (map.getSource('selection-borders') as maplibregl.GeoJSONSource).setData(politicalBorders({type:'FeatureCollection',features:selectedParts}));
    lastSelectionFrame.current={data:p.data,owner:p.selected};
   }
-  map.setFilter('province-selection',['==',['get','id'],p.regionSelection?.kind==='province'?(p.regionSelection.feature?.properties.id??''):'']);
+  const selectedRegion=p.regionSelection?.feature?.properties;
+  const selectedLocator=selectedRegion?.locatorOnly?(selectedRegion.id??''):'';
+  map.setFilter('province-selection',['==',['get','id'],selectedRegion&&!selectedRegion.locatorOnly?(selectedRegion.id??''):'']);
+  map.setFilter('province-locator-selection',['all',['==',['get','locatorOnly'],true],['==',['get','id'],selectedLocator]]);
+  map.setPaintProperty('province-label','text-halo-color',['case',['==',['get','id'],selectedLocator],'#ffe5a4','#eee8d2']);
+  map.setPaintProperty('province-label','text-halo-width',['case',['==',['get','id'],selectedLocator],1.7,0.6]);
   for(const id of ['country-label','country-label-viewport','ocean-label','place-label','reference-site-label','capital-label']) map.setLayoutProperty(id,'visibility',p.layers.labels?'visible':'none');
-  for(const id of ['province-line','province-label'])map.setLayoutProperty(id,'visibility',p.layers.provinces?'visible':'none');
+  for(const id of ['province-line','province-reference-line','province-selection','province-locator-selection'])map.setLayoutProperty(id,'visibility',p.layers.provinces?'visible':'none');
   map.setLayoutProperty('province-label','visibility',p.layers.provinces&&p.layers.labels?'visible':'none');
   for(const id of ['event-dot','event-label'])map.setLayoutProperty(id,'visibility',p.layers.events?'visible':'none');
   for(const id of ['occupation-base','occupation-pattern','occupation-line'])map.setLayoutProperty(id,'visibility',p.layers.occupation?'visible':'none');
@@ -211,6 +216,10 @@ export default function MapView(props:Props){
    map.addLayer({id:'country-line-casing',type:'line',source:'borders',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#405449','line-width':['interpolate',['linear'],['zoom'],0,0.8,4,1.15,8,1.45],'line-opacity':0.55}},'ocean-mask');
    map.addLayer({id:'country-line',type:'line',source:'borders',layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#e2dbc0','line-width':['interpolate',['linear'],['zoom'],0,0.28,4,0.45,8,0.65],'line-opacity':0.8}},'ocean-mask');
    map.addLayer({id:'province-line',type:'line',source:'provinces',minzoom:4.5,layout:{'line-join':'round','line-cap':'round'},paint:{'line-color':'#516a59','line-width':['interpolate',['linear'],['zoom'],4.5,0.3,8,0.7],'line-opacity':['interpolate',['linear'],['zoom'],4.5,0,6,['case',['==',['get','boundaryVisible'],false],0,0.42]]}});
+   map.addLayer({id:'province-reference-line',type:'line',source:'provinces',minzoom:4.5,
+    filter:['all',['==',['get','country'],'United Kingdom'],['==',['get','geographicReference'],true],['==',['get','boundaryVisible'],false]],
+    paint:{'line-color':'#485a50','line-width':['interpolate',['linear'],['zoom'],4.5,0.35,8,0.75],
+     'line-opacity':['interpolate',['linear'],['zoom'],4.5,0,6,0.30],'line-dasharray':[2,2]}},'ocean-mask');
    map.addLayer({id:'province-hit',type:'fill',source:'provinces',minzoom:4.7,paint:{'fill-color':'#ffffff','fill-opacity':0}});
    map.addLayer({id:'province-selection',type:'line',source:'provinces',filter:['==',['get','id'],''],paint:{'line-color':'#f6e4ac','line-width':1.5}});
    // Transparent repeating tile: a separate tint beneath it carries the occupier's color.
@@ -249,6 +258,9 @@ export default function MapView(props:Props){
      'text-opacity':['interpolate',['linear'],['zoom'],0,0.86,4.8,0.92,9,0.80]}});
    map.addLayer({id:'country-label',type:'symbol',source:'country-labels',layout:{...text,'symbol-placement':'point','text-rotate':['get','angle'],'text-rotation-alignment':'map','text-pitch-alignment':'map','text-field':['get','name'],'text-allow-overlap':true,'text-ignore-placement':true,'text-padding':0,'text-size':['interpolate',['exponential',2],['zoom'],0,['case',['==',['get','compact'],true],8,['max',1.4,['get','size']]],6,['case',['==',['get','compact'],true],28,['max',16,['*',64,['get','size']]]]]},paint:{'text-color':'#23322e','text-halo-color':'#f5e9cf','text-halo-width':.65,'text-opacity':['interpolate',['linear'],['zoom'],4.7,1,6.3,0]}});
    map.addLayer({id:'country-label-viewport',type:'symbol',source:'viewport-labels',layout:{...text,'text-field':['get','name'],'text-allow-overlap':true,'text-ignore-placement':true,'text-font':['Atlas Serif'],'text-letter-spacing':.3,'text-size':['interpolate',['linear'],['zoom'],0,10,4,22],'text-rotation-alignment':'map','text-pitch-alignment':'map'},paint:{'text-color':'#23322e','text-halo-color':'#f5e9cf','text-halo-width':.8,'text-opacity':['interpolate',['linear'],['zoom'],4.7,1,6.3,0]}});
+   map.addLayer({id:'province-locator-selection',type:'circle',source:'province-labels',minzoom:4.7,
+    filter:['==',['get','id'],''],paint:{'circle-radius':10,'circle-color':'#ffe5a4','circle-opacity':0.3,
+     'circle-stroke-color':'#ffe5a4','circle-stroke-width':2}});
    map.addLayer({id:'province-label',type:'symbol',source:'province-labels',filter:['!=',['get','suppressLabel'],true],minzoom:4.7,layout:{...text,'text-field':['case',['==',['get','locatorOnly'],true],['concat',['get','label'],'（',['coalesce',['get','locatorLabel'],'省治'],'）'],['get','label']],'text-size':['interpolate',['exponential',1.2],['zoom'],4.7,12,8,23],'text-padding':14,'text-letter-spacing':0.04},paint:{'text-color':'#3b5144','text-halo-color':'#eee8d2','text-halo-width':0.6,'text-opacity':['interpolate',['linear'],['zoom'],4.9,0,6.3,0.95]}});
    map.addLayer({id:'place-dot',type:'circle',source:'places',minzoom:3.3,paint:{'circle-radius':3,'circle-color':'#f6e7bd','circle-stroke-color':'#36443a','circle-stroke-width':1.5,'circle-opacity':['interpolate',['linear'],['zoom'],3.3,0,4.5,1]}});
    map.addLayer({id:'place-label',type:'symbol',source:'places',minzoom:3.3,layout:{...text,'text-field':['get','name'],'text-size':13,'text-offset':[0,1.3],'text-anchor':'top'},paint:{'text-color':'#253d35','text-halo-color':'#f7edd3','text-halo-width':0.9,'text-opacity':['interpolate',['linear'],['zoom'],3.3,0,4.8,1]}});
@@ -338,7 +350,7 @@ export default function MapView(props:Props){
    }
    const place=check('place-dot');if(place){p.onSelect({kind:'place',id:place.properties.id,name:place.properties.name,position:e.lngLat.toArray()});return;}
    const province=p.layers.provinces?check('province-hit'):null;
-   if(province&&map.getZoom()>4.7){map.setFilter('province-selection',['==',['get','id'],province.properties.id]);p.onSelect({kind:'province',feature:provinceData.current.get(province.properties.id)||province as AtlasFeature,name:province.properties.label,position:e.lngLat.toArray()});return;}
+   if(province&&map.getZoom()>4.7){p.onSelect({kind:'province',feature:provinceData.current.get(province.properties.id)||province as AtlasFeature,name:province.properties.label,position:e.lngLat.toArray()});return;}
    selectCountryAt(e);
   });
   const capitalPopup=new maplibregl.Popup({closeButton:false,closeOnClick:false,offset:10,className:'capital-tooltip'});

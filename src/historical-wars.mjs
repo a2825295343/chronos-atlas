@@ -1,6 +1,7 @@
 import {participantsAt} from './conflicts.mjs';
 import {cowCode} from './country-codes.mjs';
 const aliases={
+ 'Kingdom of Cambodia':['Cambodia','Khmer Empire','Post-Angkor Cambodia'],
  'Konbaung Dynasty':['Burma','Myanmar'],
  'Ashanti Empire':['Ashanti','Asante'],
  'Ethiopian Empire':['Ethiopia','Ethiopians'],

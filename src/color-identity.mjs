@@ -2,6 +2,7 @@ import {colorGroups} from './color-groups.mjs';
 // Names of one continuing country share a color key. Dynasties and independent
 // predecessor/successor states otherwise keep their own historical identity.
 const aliases={
+ 'Kingdom of Cambodia':'高棉帝国',
  'Buyid Dynasty':'布韦希王朝',
  'Republic of Haiti':'海地','Second Empire of Haiti':'海地','Empire of Haiti':'海地','Divided Haiti':'海地',
  'Principality of Bulgaria':'保加利亚','Kingdom of Bulgaria':'保加利亚',

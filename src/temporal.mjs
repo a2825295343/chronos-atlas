@@ -1,5 +1,15 @@
 import {colorGroups} from './color-groups.mjs';
 import {colorPolities} from './colors.mjs';
+import polygonClipping from 'polygon-clipping';
+
+const cambodianUnions=new WeakMap();
+function cambodianTerritory(main,other){
+ if(!other)return main.geometry;
+ let matches=cambodianUnions.get(main);
+ if(!matches){matches=new WeakMap();cambodianUnions.set(main,matches);}
+ if(!matches.has(other))matches.set(other,{type:'MultiPolygon',coordinates:polygonClipping.union(main.geometry.coordinates,other.geometry.coordinates)});
+ return matches.get(other);
+}
 /** Query dated records; a relationship polygon never becomes a territorial owner. */
 export function activePolities(collection,year){
  const rows=new Map();
@@ -14,6 +24,18 @@ export function activePolities(collection,year){
  if(year>=1380&&year<=1394&&rows.has('Golden Horde'))rows.delete('Blue Horde');
  // The royal Prussian record supersedes the older composite source outline.
  if(year>=1701&&rows.has('Kingdom of Prussia'))rows.delete('Brandenburg-Prussia');
+ // Both source names describe post-Angkor Cambodia, sometimes in separate
+ // regions. Preserve their combined territory under one historical identity.
+ if(year>=1432&&year<=1862){
+  const main=rows.get('Khmer Empire')||rows.get('Cambodia');
+  if(main){
+   const other=rows.get('Khmer Empire')&&rows.get('Cambodia');
+   rows.delete('Khmer Empire');rows.delete('Cambodia');
+   rows.set('Kingdom of Cambodia',{...main,geometry:cambodianTerritory(main,other),properties:{...main.properties,
+    NAME:'Kingdom of Cambodia',qid:'Q4919413',displayName:'柬埔寨王国',labelPath:undefined,
+    representationNote:'原始地图以 Cambodia 和 Khmer Empire 分别收录后吴哥时期的地域，现合并为同一王国。边界仍属历史范围概化。'}});
+  }
+ }
  return colorPolities({type:'FeatureCollection',features:[...rows.values()].map(feature=>{
   const p=feature.properties;
   let name=p.NAME,qid=p.qid;

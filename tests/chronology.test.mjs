@@ -40,7 +40,7 @@ test('global reviewed identities respect their own dates, including Europe, Amer
  assert.equal(at(-300).features.find(f=>f.properties.NAME==='Han').properties.qid,'Q1574130');
  const facts=read('public/data/polity-facts.json').entities;
  for(const rule of read('public/data/chronology-corrections.json').identityCorrections){if(!rule.qid.startsWith('Q'))continue;assert.ok(facts[rule.qid],rule.qid);assert.ok(!facts[rule.qid].fields.instanceOf?.some(r=>r.value==='Q4167410'),`${rule.name} cannot resolve to a disambiguation page`);}
- assert.equal(at(1200).features.find(f=>f.properties.NAME==='Khmer Empire').properties.qid,'Q201705');assert.equal(at(1500).features.find(f=>f.properties.NAME==='Khmer Empire').properties.qid,'Q4919413');
+ assert.equal(at(1200).features.find(f=>f.properties.NAME==='Khmer Empire').properties.qid,'Q201705');assert.equal(at(1500).features.find(f=>f.properties.NAME==='Kingdom of Cambodia').properties.qid,'Q4919413');
 });
 
 test('1918 and 1919 restore the missing Soviet Russian core without annexing existing neighboring owners',()=>{

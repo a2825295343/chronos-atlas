@@ -4,7 +4,8 @@ const applies=([, ,from,to,at],year)=>
  (from!=null||to!=null||at!=null)&&(from==null||from<=year)&&(to==null||year<=to)&&(at==null||at===year);
 
 export function reviewedCapitals(index,id,year,name){
- return (index.archive[id]||[]).filter(row=>row[6]&&(!row[7]||row[7]===name)&&applies(row,year));
+ const records=index.named?.[name]||index.archive[id]||[];
+ return records.filter(row=>row[6]&&(!row[7]||row[7]===name)&&applies(row,year));
 }
 
 function markerPosition(coordinates,parts,territories){
@@ -38,7 +39,7 @@ export function capitalsAtYear(world,year,index,identities){
  for(const [owner,parts] of territories){
   const p=(parts.find(part=>part.properties.NAME===owner)||parts[0]).properties;
   const id=identities[p.NAME]||p.qid;
-  const records=index.archive[id]||[];
+  const records=index.named?.[p.NAME]||index.archive[id]||[];
   const dated=records.filter(row=>(!row[7]||row[7]===p.NAME)&&applies(row,year));
   const reviewed=dated.filter(row=>row[6]);
   const manual=dated.filter(record=>record[5]&&record[1]);

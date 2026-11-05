@@ -403,8 +403,14 @@ for feature in shard:
         label=city['properties'].get('NAME_ZH') or city['properties']['NAME']
         modern[p['NAME']]=[label,[round(x,5) for x in city['geometry']['coordinates']]]
 
+supplement = read('public/data/reviewed-capital-seats.json')
+for rows in archive.values():
+    for row in rows:
+        row[0] = supplement['translations'].get(row[0], row[0])
+
 (ROOT/'public/data/map-capitals.json').write_text(json.dumps({
-    'source':SOURCE,'archive':archive,'modern':modern,'hasDated':has_dated
+    'source':SOURCE,'archive':archive,'modern':modern,'hasDated':has_dated,
+    'named':supplement['polities']
 },ensure_ascii=False,separators=(',',':')),encoding='utf-8')
 print('Archived polities:',len(archive),'located records:',sum(bool(r[1]) for rows in archive.values() for r in rows),'modern map matches:',len(modern))
 

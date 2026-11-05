@@ -5,6 +5,7 @@ import {capitalsAtYear,reviewedCapitals} from '../src/capitals.mjs';
 import {pointInGeometry} from '../src/history.mjs';
 import {activePolities} from '../src/temporal.mjs';
 import {selectFlag} from '../src/archive-rules.mjs';
+import {leadershipFor} from '../src/archive-rules.mjs';
 import {warsAtYear,participantsAt} from '../src/conflicts.mjs';
 import {warInvolvesPolity} from '../src/historical-wars.mjs';
 
@@ -108,7 +109,7 @@ test('new historical capital records match their active polities and contemporar
   [1850,'Qajar Dynasty','德黑兰'],
  ])assert.deepEqual(labels(year,name),[label],`${year} ${name}`);
  assert.deepEqual(labels(1000,'Buyid Dynasty').sort(),['巴格达（伊拉克）','雷伊（吉巴勒）','设拉子（法尔斯）'].sort());
- assert.deepEqual(reviewedCapitals(index,'Q80702',1700,'Spain Colony - Mexico'),[]);
+ assert.deepEqual(reviewedCapitals(index,'Q80702',1700,'Spain Colony - Mexico').map(row=>row[0]),['墨西哥城（新西班牙首府）']);
  assert.deepEqual(reviewedCapitals(index,'Q80702',1700,'Spanish Empire').map(row=>row[0]),['马德里']);
  assert.deepEqual(reviewedCapitals(index,'Q129286',1910).map(row=>row[0]),['加尔各答']);
  assert.deepEqual(reviewedCapitals(index,'Q129286',1935).map(row=>row[0]),['新德里']);
@@ -181,4 +182,71 @@ test('Venice and the Baltic orders show their dated, distinct seats',()=>{
  assert.deepEqual(labels(1504,'Livonian Confederation').sort(),[
   '文登（骑士团团长驻地）','里加（大主教驻地）',
  ]);
+});
+
+test('American state and colonial seats appear on their own territories',()=>{
+ for(const [year,name,label] of [
+  [1490,'Aztec Triple Alliance','特诺奇提特兰'],[1490,'Michoacán','钦聪灿'],
+  [1490,'Inca Empire','库斯科'],[1550,'Inca Empire','比尔卡班巴（新印加王廷）'],
+  [1550,'Itza Mayans','诺赫佩滕（伊察王廷）'],
+  [1550,'Spain Colony - Mexico','墨西哥城（新西班牙首府）'],
+  [1650,'Spain Colony - Peru','利马（秘鲁总督区首府）'],
+  [1650,'New France','魁北克'],[1650,'New Netherland','新阿姆斯特丹'],
+  [1650,'New Sweden','克里斯蒂娜堡'],
+  [1725,'Portugal Colony - Brazil','萨尔瓦多（巴西总督府驻地）'],
+  [1800,'Portugal Colony - Brazil','里约热内卢（巴西行政中心）'],
+  [1750,'Spain Colony - Cuba','哈瓦那'],[1750,'Spain Colony - Puerto Rico','圣胡安'],
+  [1850,'United Kingdom Colony - Jamaica','西班牙镇'],
+ ])assert.ok(labels(year,name).includes(label),`${year} ${name} ${label}`);
+ assert.ok(!labels(1725,'Spain Colony - Mexico').includes('马德里'));
+ assert.deepEqual(reviewedCapitals(index,'Q382593',1750,'New Netherland'),[]);
+});
+
+test('post-Angkor Cambodian records share one clickable territory and dated archive',()=>{
+ const facts=read('polity-facts.json').entities;
+ for(const year of [1700,1710,1725,1735,1750,1800,1850]){
+  const frame=world(year),rows=frame.features.filter(f=>['Cambodia','Khmer Empire','Kingdom of Cambodia'].includes(f.properties.NAME));
+  assert.equal(rows.length,1,`${year} duplicate Cambodian polity`);
+  assert.equal(rows[0].properties.qid,'Q4919413');
+  assert.deepEqual(labels(year,'Kingdom of Cambodia'),['乌栋']);
+  assert.ok(leadershipFor(facts.Q4919413,undefined,year).rows.length,`${year} missing ruler`);
+ }
+ const original=shardCache.get(17).features.filter(f=>['Cambodia','Khmer Empire'].includes(f.properties.NAME)&&f.properties.validFrom<=1725&&f.properties.validTo>=1725);
+ const merged=world(1725).features.find(f=>f.properties.NAME==='Kingdom of Cambodia');
+ for(const point of [[104.7425,11.8239],[107,12]]){
+  assert.ok(original.some(f=>pointInGeometry(point,f.geometry)));
+  assert.ok(pointInGeometry(point,merged.geometry));
+ }
+ assert.ok(leadershipFor(facts.Q4919413,undefined,1725).rows.some(r=>r.label==='萨达二世'));
+ assert.ok(world(1400).features.some(f=>f.properties.NAME==='Khmer Empire'));
+});
+
+test('Pakistan and Laos retain capital markers across the former modern cutoff',()=>{
+ for(const [year,name,label] of [
+  [1950,'Islamic Republic of Pakistan','卡拉奇'],
+  [1965,'Islamic Republic of Pakistan','拉瓦尔品第（临时首都）'],
+  [1971,'Islamic Republic of Pakistan','伊斯兰堡'],
+  [2023,'Islamic Republic of Pakistan','伊斯兰堡'],
+  [1960,'Kingdom of Laos','万象（行政首都）'],
+  [1971,'Kingdom of Laos','万象（行政首都）'],
+  [1971,'Kingdom of Laos','琅勃拉邦（王室驻地）'],
+  [2023,'Communist Laos','万象'],
+ ])assert.ok(labels(year,name).includes(label),`${year} ${name} ${label}`);
+});
+
+test('reviewed untranslated capitals are Chinese in the index and archives',()=>{
+ const entities=read('polity-facts.json').entities;
+ for(const year of [1351,1739]){
+  const found=capitals(year).filter(f=>['Sultanate of Sulu','Jaffna kingdom','Rasulid Dynasty'].includes(f.properties.owner));
+  assert.ok(found.length);
+  for(const f of found)assert.match(f.properties.label,/[\u3400-\u9fff]/u);
+ }
+ for(const entity of Object.values(entities))for(const row of entity.fields.capital||[]){
+  assert.ok(!['Maimbung','Jolo','Buansa','Nallur','Old City of Taiz'].includes(row.label));
+ }
+ const flag=selectFlag(read('flags.json').entities.Q627449,1725);
+ assert.equal(flag.reference,false);
+ assert.match(flag.flag.role,/汉达基黑旗/);
+ assert.ok(flag.flag.periodSource);
+ assert.equal(selectFlag(read('flags.json').entities.Q627449,1800).flag,undefined);
 });
